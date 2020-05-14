@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 import {
   TableContainer,
@@ -10,38 +10,48 @@ import {
   Paper,
 } from "@material-ui/core";
 
-export class CartridgesTable extends Component {
-  state = {};
+import { makeStyles } from "@material-ui/core/styles";
 
-  render() {
-    const { cartridges } = this.props;
-    const eleveation = this.props.elevation ? this.props.elevation : 5;
+const useStyles = makeStyles((theme) => ({
+  header: {
+    backgroundColor: theme.palette.primary.dark,
+    color: theme.palette.common.white,
+  },
+}));
 
-    return (
-      <TableContainer component={Paper} elevation={eleveation}>
-        <Table aria-label="cartridges table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Производитель</TableCell>
-              <TableCell align="right">Наименование</TableCell>
-              <TableCell align="right">Количество</TableCell>
+function CartridgesTable(props) {
+  const classes = useStyles();
+  const { cartridges } = props;
+  const eleveation = props.elevation ? props.elevation : 5;
+
+  return (
+    <TableContainer component={Paper} elevation={eleveation}>
+      <Table aria-label="cartridges table">
+        <TableHead>
+          <TableRow>
+            <TableCell className={classes.header}>Производитель</TableCell>
+            <TableCell className={classes.header} align="right">
+              Наименование
+            </TableCell>
+            <TableCell className={classes.header} align="right">
+              Количество
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {cartridges.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                {row.manufacturer}
+              </TableCell>
+              <TableCell align="right">{row.name}</TableCell>
+              <TableCell align="right">{row.count}</TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {cartridges.map((row) => (
-              <TableRow key={row.name}>
-                <TableCell component="th" scope="row">
-                  {row.manufacturer}
-                </TableCell>
-                <TableCell align="right">{row.name}</TableCell>
-                <TableCell align="right">{row.count}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    );
-  }
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
 }
 
 export default CartridgesTable;

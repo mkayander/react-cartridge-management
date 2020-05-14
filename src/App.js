@@ -5,7 +5,7 @@ import {
   responsiveFontSizes,
 } from "@material-ui/core/styles";
 
-import { green, blue } from "@material-ui/core/colors";
+import { green, blue, lightGreen } from "@material-ui/core/colors";
 
 import "./App.css";
 import { NavBar, CartridesTable } from "./components";
@@ -20,17 +20,16 @@ import SuppliesTable from "./components/SuppliesTable/SuppliesTable";
 export class App extends Component {
   state = {
     navbarTitle: "Cartridges",
-    theme: responsiveFontSizes(
-      createMuiTheme({
-        palette: {
-          primary: blue,
-          secondary: green,
-        },
-        status: {
-          danger: "orange",
-        },
-      })
-    ),
+    theme: createMuiTheme({
+      palette: {
+        type: "dark",
+        // primary: blue,
+        // secondary: green,
+      },
+      // status: {
+      //   danger: "orange",
+      // },
+    }),
     cartridgesData: [],
     suppliesData: [],
   };

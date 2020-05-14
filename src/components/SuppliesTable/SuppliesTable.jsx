@@ -14,7 +14,7 @@ import { withStyles, makeStyles } from "@material-ui/core/styles";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.dark,
     color: theme.palette.common.white,
   },
 }))(TableCell);
@@ -57,7 +57,8 @@ export default function SuppliesTable(props) {
           {supplies.map((row) => (
             <TableRow
               key={row.id}
-              className={row.out ? classes.outRow : classes.inRow}>
+              className={row.out ? classes.outRow : classes.inRow}
+            >
               <TableCell component="th" scope="row">
                 {row.date}
               </TableCell>
