@@ -1,4 +1,4 @@
-import { Container } from "@material-ui/core";
+import { Container, Grid } from "@material-ui/core";
 import {
   MuiThemeProvider,
   createMuiTheme,
@@ -47,9 +47,15 @@ export class App extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <NavBar title={navbarTitle} />
-        <Container style={{ paddingTop: 5 + "%" }}>
-          <CartridesTable cartridges={cartridgesData} />
-          <SuppliesTable supplies={suppliesData} />
+        <Container style={{ paddingTop: 5 + "%" }} maxWidth="lg">
+          <Grid container spacing={3}>
+            <Grid key="cartridges" xs={12} lg={4} item>
+              <CartridesTable cartridges={cartridgesData} />
+            </Grid>
+            <Grid key="supplies" xs={12} lg={8} item>
+              <SuppliesTable supplies={suppliesData} />
+            </Grid>
+          </Grid>
         </Container>
       </MuiThemeProvider>
     );

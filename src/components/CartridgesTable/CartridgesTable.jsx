@@ -15,9 +15,10 @@ export class CartridgesTable extends Component {
 
   render() {
     const { cartridges } = this.props;
+    const eleveation = this.props.elevation ? this.props.elevation : 5;
 
     return (
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} elevation={eleveation}>
         <Table aria-label="cartridges table">
           <TableHead>
             <TableRow>
