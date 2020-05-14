@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { AppBar, Toolbar } from "@material-ui/core";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
 
 export class NavBar extends Component {
   render() {
