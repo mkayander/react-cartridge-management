@@ -5,9 +5,7 @@ import {
     responsiveFontSizes,
 } from "@material-ui/core/styles";
 
-import { SnackbarProvider, withSnackbar } from "notistack";
-
-import { green, blue, lightGreen } from "@material-ui/core/colors";
+import { green, blue } from "@material-ui/core/colors";
 
 import "./App.css";
 
@@ -63,7 +61,7 @@ export class App extends Component {
     handleSupplyDelete = async (id) => {
         await deleteSupply(id);
         await this.handleRefresh();
-        this.props.enqueueSnackbar(`Перемещение №${id} удалено успешно!`);
+        // this.props.enqueueSnackbar(`Перемещение №${id} удалено успешно!`);
     };
 
     async componentDidMount() {
@@ -81,26 +79,24 @@ export class App extends Component {
 
         return (
             <MuiThemeProvider theme={theme}>
-                <SnackbarProvider maxSnack={3}>
-                    <NavBar title={navbarTitle} />
-                    <Container style={{ paddingTop: 5 + "%" }} maxWidth="lg">
-                        <Grid container spacing={3}>
-                            <Grid key="cartridges" xs={12} lg={4} item>
-                                <CartridesTable cartridges={cartridgesData} />
-                            </Grid>
-                            <Grid key="supplies" xs={12} lg={8} item>
-                                <SuppliesEditable
-                                    data={suppliesData}
-                                    cartridges={cartridgesData}
-                                    handleSupplyDelete={this.handleSupplyDelete}
-                                />
-                            </Grid>
+                <NavBar title={navbarTitle} />
+                <Container style={{ paddingTop: 5 + "%" }} maxWidth="lg">
+                    <Grid container spacing={3}>
+                        <Grid key="cartridges" xs={12} lg={4} item>
+                            <CartridesTable cartridges={cartridgesData} />
                         </Grid>
-                    </Container>
-                </SnackbarProvider>
+                        <Grid key="supplies" xs={12} lg={8} item>
+                            <SuppliesEditable
+                                data={suppliesData}
+                                cartridges={cartridgesData}
+                                handleSupplyDelete={this.handleSupplyDelete}
+                            />
+                        </Grid>
+                    </Grid>
+                </Container>
             </MuiThemeProvider>
         );
     }
 }
 
-export default withSnackbar(App);
+export default App;

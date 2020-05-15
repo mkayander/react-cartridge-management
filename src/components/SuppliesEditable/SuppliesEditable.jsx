@@ -3,7 +3,6 @@ import { useTheme, makeStyles } from "@material-ui/core/styles";
 
 import MaterialTable from "material-table";
 import localization from "./localization";
-import { deleteSupply } from "../../api";
 
 const useStyles = makeStyles((theme) => ({
     outRow: {
