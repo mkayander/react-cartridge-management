@@ -5,7 +5,7 @@ import {
     responsiveFontSizes,
 } from "@material-ui/core/styles";
 
-import { SnackbarProvider, useSnackbar } from "notistack";
+import { SnackbarProvider, withSnackbar } from "notistack";
 
 import { green, blue, lightGreen } from "@material-ui/core/colors";
 
@@ -60,10 +60,11 @@ export class App extends Component {
         });
     };
 
-    async handleSupplyDelete(id) {
+    handleSupplyDelete = async (id) => {
         await deleteSupply(id);
         await this.handleRefresh();
-    }
+        this.props.enqueueSnackbar(`Перемещение №${id} удалено успешно!`);
+    };
 
     async componentDidMount() {
         await this.handleRefresh();
@@ -80,7 +81,7 @@ export class App extends Component {
 
         return (
             <MuiThemeProvider theme={theme}>
-                <SnackbarProvider>
+                <SnackbarProvider maxSnack={3}>
                     <NavBar title={navbarTitle} />
                     <Container style={{ paddingTop: 5 + "%" }} maxWidth="lg">
                         <Grid container spacing={3}>
@@ -88,16 +89,12 @@ export class App extends Component {
                                 <CartridesTable cartridges={cartridgesData} />
                             </Grid>
                             <Grid key="supplies" xs={12} lg={8} item>
-                                {/* <SuppliesTable supplies={suppliesData} /> */}
                                 <SuppliesEditable
                                     data={suppliesData}
                                     cartridges={cartridgesData}
                                     handleSupplyDelete={this.handleSupplyDelete}
                                 />
                             </Grid>
-                            {/* <Grid key="materialTable" item>
-              
-            </Grid> */}
                         </Grid>
                     </Container>
                 </SnackbarProvider>
@@ -106,4 +103,4 @@ export class App extends Component {
     }
 }
 
-export default App;
+export default withSnackbar(App);
