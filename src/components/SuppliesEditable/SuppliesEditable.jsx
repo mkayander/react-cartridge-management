@@ -43,7 +43,7 @@ function SuppliesEditable(props) {
             options={{
                 rowStyle: (rowData) => {
                     console.log("rowStyle: rowData=", rowData);
-                    return { backgroundColor: "()" };
+                    return { backgroundColor: "#999999" };
                 },
             }}
             editable={{
