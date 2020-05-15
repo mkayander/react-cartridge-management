@@ -1,13 +1,28 @@
 import { api } from "./api";
 
 export const fetchCartridgesList = async () => {
-  let cartridges = await api.get("cartridges/");
-  console.log("fetchCartridgesList:", cartridges);
-  return cartridges.data;
+    const cartridges = await api.get("cartridges/");
+    console.log("fetchCartridgesList:", cartridges);
+    // return cartridges.data;
+    return (await api.get("cartridges/")).data;
 };
 
 export const fetchSupplies = async () => {
-  let supplies = await api.get("supplies/");
-  console.log("fetchSupplies:", supplies);
-  return supplies.data;
+    const supplies = await api.get("supplies/");
+    console.log("fetchSupplies:", supplies);
+    return supplies.data;
+};
+
+export const fetchOrders = async () => {
+    const orders = await api.get("orders/");
+    console.log("fetchSupplies:", orders);
+    return orders.data;
+};
+
+export const deleteSupply = async (id) => {
+    api.delete(`supplies/${id}/`);
+};
+
+export const updateSupply = async (supply) => {
+    api.delete(`supplies/${supply}/`);
 };
