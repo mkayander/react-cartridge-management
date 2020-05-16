@@ -24,5 +24,12 @@ export const deleteSupply = async (id) => {
 };
 
 export const updateSupply = async (supply) => {
-    api.delete(`supplies/${supply}/`);
+    api.put(`supplies/${supply.id}/`, supply);
+};
+
+export const createSupply = async (supply) => {
+    api.post(`supplies/`, supply).catch((reason) => {
+        console.log("response: ", reason.response.data);
+    });
+    console.log("createSupply:", supply);
 };

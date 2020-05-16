@@ -13,6 +13,11 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        borderTop: theme.borderSize,
+        borderTopColor: theme.palette.primary.light,
+        borderTopStyle: "solid",
+    },
     header: {
         backgroundColor: theme.palette.primary.dark,
         color: theme.palette.common.white,
@@ -25,7 +30,10 @@ function CartridgesTable(props) {
     const eleveation = props.elevation ? props.elevation : 5;
 
     return (
-        <TableContainer component={Paper} elevation={eleveation}>
+        <TableContainer
+            className={classes.root}
+            component={Paper}
+            elevation={eleveation}>
             <Table aria-label="cartridges table">
                 <TableHead>
                     <TableRow>

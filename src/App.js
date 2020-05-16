@@ -14,6 +14,8 @@ import {
     fetchSupplies,
     fetchOrders,
     deleteSupply,
+    createSupply,
+    updateSupply,
 } from "./api";
 
 import React, { Component } from "react";
@@ -21,7 +23,7 @@ import React, { Component } from "react";
 import {
     NavBar,
     CartridesTable,
-    SuppliesTable,
+    // SuppliesTable,
     SuppliesEditable,
 } from "./components";
 
@@ -37,6 +39,7 @@ export class App extends Component {
                     primary: blue,
                     secondary: green,
                 },
+                borderSize: "0.5rem",
                 // status: {
                 //   danger: "orange",
                 // },
@@ -64,6 +67,18 @@ export class App extends Component {
         // this.props.enqueueSnackbar(`Перемещение №${id} удалено успешно!`);
     };
 
+    handleSupplyCreate = async (supply) => {
+        await createSupply(supply);
+        await this.handleRefresh();
+        // this.props.enqueueSnackbar(`Перемещение №${id} удалено успешно!`);
+    };
+
+    handleSupplyUpdate = async (supply) => {
+        await updateSupply(supply);
+        await this.handleRefresh();
+        // this.props.enqueueSnackbar(`Перемещение №${id} удалено успешно!`);
+    };
+
     async componentDidMount() {
         await this.handleRefresh();
     }
@@ -74,7 +89,7 @@ export class App extends Component {
             theme,
             cartridgesData,
             suppliesData,
-            ordersData,
+            // ordersData,
         } = this.state;
 
         return (
@@ -90,6 +105,8 @@ export class App extends Component {
                                 data={suppliesData}
                                 cartridges={cartridgesData}
                                 handleSupplyDelete={this.handleSupplyDelete}
+                                handleSupplyCreate={this.handleSupplyCreate}
+                                handleSupplyUpdate={this.handleSupplyUpdate}
                             />
                         </Grid>
                     </Grid>
