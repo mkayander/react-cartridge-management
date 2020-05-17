@@ -5,6 +5,8 @@ const localization = {
     },
     toolbar: {
         nRowsSelected: "{0} перемещение(ий) выбрано",
+        searchTooltip: "Поиск",
+        searchPlaceholder: "Поиск",
     },
     header: {
         actions: "Действия",
@@ -22,10 +24,6 @@ const localization = {
             cancelTooltip: "Отмена",
             saveTooltip: "Подтвердить",
         },
-    },
-    toolbar: {
-        searchTooltip: "Поиск",
-        searchPlaceholder: "Поиск",
     },
 };
 

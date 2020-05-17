@@ -10,7 +10,7 @@ import localization from "./localization";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        borderTop: theme.borderSize,
+        borderTop: theme.tables.borderSize,
         borderTopColor: theme.palette.primary.light,
         borderTopStyle: "solid",
     },
@@ -52,6 +52,7 @@ function SuppliesEditable(props) {
         {
             title: "Событие",
             field: "out",
+            initialEditValue: "true",
             lookup: { true: "Выдача", false: "Поступление" },
         },
         {
@@ -67,7 +68,11 @@ function SuppliesEditable(props) {
         <MaterialTable
             components={{
                 Container: (props) => (
-                    <Paper {...props} elevation={5} className={classes.root} />
+                    <Paper
+                        {...props}
+                        elevation={theme.tables.elevation}
+                        className={classes.root}
+                    />
                 ),
             }}
             localization={localization}
@@ -76,6 +81,7 @@ function SuppliesEditable(props) {
             data={props.data}
             options={{
                 exportButton: true,
+                actionsColumnIndex: -1,
                 rowStyle: (rowData) =>
                     rowData.out ? rowStyles.outRow : rowStyles.inRow,
             }}

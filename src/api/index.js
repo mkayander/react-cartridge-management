@@ -1,5 +1,7 @@
 import { api } from "./api";
 
+// export { default as supplyDao } from "./supplyDao";
+
 export const fetchCartridgesList = async () => {
     const cartridges = await api.get("cartridges/");
     console.log("fetchCartridgesList:", cartridges);

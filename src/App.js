@@ -26,12 +26,14 @@ import {
     // SuppliesTable,
     SuppliesEditable,
 } from "./components";
+import OrdersTable from "./components/OrdersTable/OrdersTable";
+import { supplyDao } from "./api/supplyDao";
 
 // import styles from "./App.css";
 
 export class App extends Component {
     state = {
-        navbarTitle: "Cartridges",
+        navbarTitle: "РЦ Валищево • Картриджи",
         theme: responsiveFontSizes(
             createMuiTheme({
                 palette: {
@@ -39,7 +41,10 @@ export class App extends Component {
                     primary: blue,
                     secondary: green,
                 },
-                borderSize: "0.5rem",
+                tables: {
+                    borderSize: "0.5rem",
+                    elevation: 5,
+                },
                 // status: {
                 //   danger: "orange",
                 // },
@@ -52,7 +57,8 @@ export class App extends Component {
 
     handleRefresh = async () => {
         const cartridges = await fetchCartridgesList();
-        const supplies = await fetchSupplies();
+        const supplies = await supplyDao.getAll();
+        // const supplies = await fetchSupplies();
         const orders = await fetchOrders();
         this.setState({
             cartridgesData: cartridges,
@@ -68,7 +74,8 @@ export class App extends Component {
     };
 
     handleSupplyCreate = async (supply) => {
-        await createSupply(supply);
+        await supplyDao.create(supply);
+        // await createSupply(supply);
         await this.handleRefresh();
         // this.props.enqueueSnackbar(`Перемещение №${id} удалено успешно!`);
     };
@@ -89,7 +96,7 @@ export class App extends Component {
             theme,
             cartridgesData,
             suppliesData,
-            // ordersData,
+            ordersData,
         } = this.state;
 
         return (
@@ -107,6 +114,12 @@ export class App extends Component {
                                 handleSupplyDelete={this.handleSupplyDelete}
                                 handleSupplyCreate={this.handleSupplyCreate}
                                 handleSupplyUpdate={this.handleSupplyUpdate}
+                            />
+                        </Grid>
+                        <Grid key="orders" xs={12} lg={12} item>
+                            <OrdersTable
+                                data={ordersData}
+                                cartridges={cartridgesData}
                             />
                         </Grid>
                     </Grid>
