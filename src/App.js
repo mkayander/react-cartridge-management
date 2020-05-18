@@ -1,4 +1,4 @@
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 import { Container } from "@material-ui/core";
 import {
@@ -15,6 +15,7 @@ import React, { Component } from "react";
 
 import { NavBar } from "./components";
 import { Home } from "./pages/Home";
+import Test from "./pages/Test";
 
 // import styles from "./App.css";
 
@@ -43,16 +44,30 @@ export class App extends Component {
         const { navbarTitle, theme } = this.state;
 
         return (
-            <MuiThemeProvider theme={theme}>
-                <NavBar title={navbarTitle} />
-                <Container style={{ paddingTop: 5 + "%" }} maxWidth="lg">
-                    <BrowserRouter>
+            <BrowserRouter>
+                <MuiThemeProvider theme={theme}>
+                    <NavBar title={navbarTitle} />
+                    <Container style={{ paddingTop: 5 + "%" }} maxWidth="lg">
                         <Switch>
                             <Route path="/" exact component={Home} />
+                            <Route path="/test" exact component={Test} />
+                            {/* <Route
+                                path="/admin"
+                                render={() => {
+                                    window.location.reload();
+                                }}
+                            />
+                            <Route
+                                path="/api"
+                                render={() => {
+                                    window.location.reload();
+                                }}
+                            /> */}
+                            {/* <Route path="/admin" exact component={() => { window.location = 'https://example.zendesk.com/hc/en-us/articles/123456789-Privacy-Policies'; return null;}} /> */}
                         </Switch>
-                    </BrowserRouter>
-                </Container>
-            </MuiThemeProvider>
+                    </Container>
+                </MuiThemeProvider>
+            </BrowserRouter>
         );
     }
 }
