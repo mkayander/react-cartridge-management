@@ -3,7 +3,6 @@ import { api } from "./api";
 export const cartridgeDao = {
     getAll: async () => {
         const response = await api.get("cartridges/");
-        console.log("ordersDao.getAll:", response);
         return response.data;
     },
     // create: async (order) => {

@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import { Paper } from "@material-ui/core";
-import { DoneAll, CheckCircle, LocalShipping } from "@material-ui/icons";
+// import { DoneAll, CheckCircle, LocalShipping } from "@material-ui/icons";
 
 import MaterialTable from "material-table";
 import localization from "../SuppliesEditable/localization";
@@ -28,6 +28,7 @@ function OrdersTable({ data, cartridges }) {
 
     return (
         <MaterialTable
+            isLoading={data.length > 0 ? false : true}
             title="Заказы"
             localization={localization}
             columns={[
@@ -94,9 +95,7 @@ function OrdersTable({ data, cartridges }) {
             actions={[
                 (rowData) => ({
                     icon: "check",
-                    tooltip: rowData.finished
-                        ? "Заказ уже завершён"
-                        : "Завершить заказ",
+                    tooltip: rowData.finished ? undefined : "Завершить заказ",
                     disabled: rowData.finished,
                     onClick: (event, rowData) => {
                         console.log(event, rowData);

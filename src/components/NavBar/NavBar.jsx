@@ -4,11 +4,10 @@ import {
     Toolbar,
     Typography,
     IconButton,
-    Button,
     Tooltip,
 } from "@material-ui/core";
 import { Http, SupervisedUserCircle } from "@material-ui/icons";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({

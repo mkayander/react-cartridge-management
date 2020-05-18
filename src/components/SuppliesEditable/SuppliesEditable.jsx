@@ -23,6 +23,7 @@ const prepareData = (supply) => {
 
 function SuppliesEditable(props) {
     const {
+        data,
         cartridges,
         handleSupplyDelete,
         handleSupplyUpdate,
@@ -66,6 +67,7 @@ function SuppliesEditable(props) {
 
     return (
         <MaterialTable
+            isLoading={data.length > 0 ? false : true}
             components={{
                 Container: (props) => (
                     <Paper
@@ -78,7 +80,7 @@ function SuppliesEditable(props) {
             localization={localization}
             title="Перемещение Картриджей"
             columns={columns}
-            data={props.data}
+            data={data}
             options={{
                 exportButton: true,
                 actionsColumnIndex: -1,

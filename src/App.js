@@ -1,21 +1,23 @@
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-import { Container } from "@material-ui/core";
+import { Container, IconButton } from "@material-ui/core";
 import {
     MuiThemeProvider,
     createMuiTheme,
     responsiveFontSizes,
 } from "@material-ui/core/styles";
+import { Close } from "@material-ui/icons";
 
 import { green, blue } from "@material-ui/core/colors";
 
-import "./App.css";
+import { SnackbarProvider } from "notistack";
 
 import React, { Component } from "react";
 
 import { NavBar } from "./components";
-import { Home } from "./pages/Home";
+
 import Test from "./pages/Test";
+import Home from "./pages/Home";
 
 // import styles from "./App.css";
 
@@ -40,32 +42,37 @@ export class App extends Component {
         ),
     };
 
+    notistackRef = React.createRef();
+    onClickDismiss = (key) => () => {
+        this.notistackRef.current.closeSnackbar(key);
+    };
+
     render() {
         const { navbarTitle, theme } = this.state;
 
         return (
             <BrowserRouter>
                 <MuiThemeProvider theme={theme}>
-                    <NavBar title={navbarTitle} />
-                    <Container style={{ paddingTop: 5 + "%" }} maxWidth="lg">
-                        <Switch>
-                            <Route path="/" exact component={Home} />
-                            <Route path="/test" exact component={Test} />
-                            {/* <Route
-                                path="/admin"
-                                render={() => {
-                                    window.location.reload();
-                                }}
-                            />
-                            <Route
-                                path="/api"
-                                render={() => {
-                                    window.location.reload();
-                                }}
-                            /> */}
-                            {/* <Route path="/admin" exact component={() => { window.location = 'https://example.zendesk.com/hc/en-us/articles/123456789-Privacy-Policies'; return null;}} /> */}
-                        </Switch>
-                    </Container>
+                    <SnackbarProvider
+                        maxSnack={3}
+                        ref={this.notistackRef}
+                        action={(key) => (
+                            <IconButton
+                                onClick={this.onClickDismiss(key)}
+                                color="inherit">
+                                <Close />
+                            </IconButton>
+                        )}>
+                        <NavBar title={navbarTitle} />
+                        <Container
+                            style={{ paddingTop: 5 + "%" }}
+                            maxWidth="lg">
+                            <Switch>
+                                <Route path="/" exact component={Home} />
+                                <Route path="/test" exact component={Test} />
+                            </Switch>
+                        </Container>
+                    </SnackbarProvider>
                 </MuiThemeProvider>
             </BrowserRouter>
         );

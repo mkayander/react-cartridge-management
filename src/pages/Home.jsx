@@ -2,47 +2,94 @@ import React, { Component } from "react";
 
 import { Grid } from "@material-ui/core";
 
+import { withSnackbar } from "notistack";
+
 import { CartridesTable, SuppliesEditable, OrdersTable } from "../components";
 import { ordersDao } from "../api/orderDao";
 import { supplyDao } from "../api/supplyDao";
 import { cartridgeDao } from "../api/cartridgeDao";
 
-export class Home extends Component {
+class Home extends Component {
     state = {
         cartridgesData: [],
         suppliesData: [],
         ordersData: [],
     };
 
-    handleRefresh = async () => {
-        const cartridges = await cartridgeDao.getAll();
-        const supplies = await supplyDao.getAll();
+    dispError = (msg) => {
+        this.props.enqueueSnackbar(msg, { variant: "error" });
+        console.log("dispError:", msg);
+    };
+
+    dispSuccess = (msg) => {
+        this.props.enqueueSnackbar(msg, { variant: "success" });
+    };
+
+    dispMsg = (msg) => {
+        this.props.enqueueSnackbar(msg);
+    };
+
+    handleRefresh = () => {
+        cartridgeDao
+            .getAll()
+            .catch((reason) => this.dispError(reason))
+            .then((value) => this.setState({ cartridgesData: value }));
+
+        supplyDao
+            .getAll()
+            .catch((reason) => this.dispError(reason))
+            .then((value) => this.setState({ suppliesData: value }));
+
         // const supplies = await fetchSupplies();
-        const orders = await ordersDao.getAll();
-        this.setState({
-            cartridgesData: cartridges,
-            suppliesData: supplies,
-            ordersData: orders,
-        });
+        ordersDao
+            .getAll()
+            .catch((reason) => this.dispError(reason))
+            .then((value) => this.setState({ ordersData: value }));
+
+        // this.setState({
+        //     cartridgesData: cartridges,
+        //     suppliesData: supplies,
+        //     ordersData: orders,
+        // });
     };
 
-    handleSupplyDelete = async (id) => {
-        await supplyDao.delete(id);
-        await this.handleRefresh();
-        // this.props.enqueueSnackbar(`Перемещение №${id} удалено успешно!`);
+    handleSupplyDelete = (id) => {
+        supplyDao
+            .delete(id)
+            .catch((reason) => {
+                this.dispError("Не удалось выполнить удаление: \n" + reason);
+            })
+            .then(() => {
+                this.handleRefresh();
+                this.dispSuccess(`Перемещение №${id} удалено успешно!`);
+            });
     };
 
-    handleSupplyCreate = async (supply) => {
-        await supplyDao.create(supply);
+    handleSupplyCreate = (supply) => {
+        supplyDao
+            .create(supply)
+            .catch((reason) => this.dispError(reason))
+            .then((value) => {
+                console.log("handleSupplyCreate.then:", value);
+                this.handleRefresh();
+                this.dispSuccess(`Перемещение создано успешно!`);
+            });
         // await createSupply(supply);
-        await this.handleRefresh();
-        // this.props.enqueueSnackbar(`Перемещение №${id} удалено успешно!`);
+        // await this.handleRefresh();
     };
 
-    handleSupplyUpdate = async (supply) => {
-        await supplyDao.update(supply);
-        await this.handleRefresh();
-        // this.props.enqueueSnackbar(`Перемещение №${id} удалено успешно!`);
+    handleSupplyUpdate = (supply) => {
+        supplyDao
+            .update(supply)
+            .catch((reason) =>
+                this.dispError("Не удалось выполнить удаление: \n" + reason)
+            )
+            .then((value) => {
+                this.handleRefresh();
+                this.dispSuccess(
+                    `Перемещение №${supply.id} обновлено успешно!`
+                );
+            });
     };
 
     async componentDidMount() {
@@ -76,3 +123,5 @@ export class Home extends Component {
         );
     }
 }
+
+export default withSnackbar(Home);
