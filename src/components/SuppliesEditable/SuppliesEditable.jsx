@@ -82,6 +82,8 @@ function SuppliesEditable(props) {
             options={{
                 exportButton: true,
                 actionsColumnIndex: -1,
+                // emptyRowsWhenPaging: true,
+                // paging: false,
                 rowStyle: (rowData) =>
                     rowData.out ? rowStyles.outRow : rowStyles.inRow,
             }}

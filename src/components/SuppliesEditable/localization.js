@@ -7,6 +7,9 @@ const localization = {
         nRowsSelected: "{0} перемещение(ий) выбрано",
         searchTooltip: "Поиск",
         searchPlaceholder: "Поиск",
+        exportTitle: "Экспорт",
+        exportAriaLabel: "Экспорт",
+        exportName: "Экспортировать в CSV",
     },
     header: {
         actions: "Действия",

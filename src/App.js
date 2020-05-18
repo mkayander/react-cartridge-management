@@ -1,4 +1,6 @@
-import { Container, Grid } from "@material-ui/core";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+
+import { Container } from "@material-ui/core";
 import {
     MuiThemeProvider,
     createMuiTheme,
@@ -9,25 +11,10 @@ import { green, blue } from "@material-ui/core/colors";
 
 import "./App.css";
 
-import {
-    fetchCartridgesList,
-    fetchSupplies,
-    fetchOrders,
-    deleteSupply,
-    createSupply,
-    updateSupply,
-} from "./api";
-
 import React, { Component } from "react";
 
-import {
-    NavBar,
-    CartridesTable,
-    // SuppliesTable,
-    SuppliesEditable,
-} from "./components";
-import OrdersTable from "./components/OrdersTable/OrdersTable";
-import { supplyDao } from "./api/supplyDao";
+import { NavBar } from "./components";
+import { Home } from "./pages/Home";
 
 // import styles from "./App.css";
 
@@ -50,79 +37,20 @@ export class App extends Component {
                 // },
             })
         ),
-        cartridgesData: [],
-        suppliesData: [],
-        ordersData: [],
     };
-
-    handleRefresh = async () => {
-        const cartridges = await fetchCartridgesList();
-        const supplies = await supplyDao.getAll();
-        // const supplies = await fetchSupplies();
-        const orders = await fetchOrders();
-        this.setState({
-            cartridgesData: cartridges,
-            suppliesData: supplies,
-            ordersData: orders,
-        });
-    };
-
-    handleSupplyDelete = async (id) => {
-        await deleteSupply(id);
-        await this.handleRefresh();
-        // this.props.enqueueSnackbar(`Перемещение №${id} удалено успешно!`);
-    };
-
-    handleSupplyCreate = async (supply) => {
-        await supplyDao.create(supply);
-        // await createSupply(supply);
-        await this.handleRefresh();
-        // this.props.enqueueSnackbar(`Перемещение №${id} удалено успешно!`);
-    };
-
-    handleSupplyUpdate = async (supply) => {
-        await updateSupply(supply);
-        await this.handleRefresh();
-        // this.props.enqueueSnackbar(`Перемещение №${id} удалено успешно!`);
-    };
-
-    async componentDidMount() {
-        await this.handleRefresh();
-    }
 
     render() {
-        const {
-            navbarTitle,
-            theme,
-            cartridgesData,
-            suppliesData,
-            ordersData,
-        } = this.state;
+        const { navbarTitle, theme } = this.state;
 
         return (
             <MuiThemeProvider theme={theme}>
                 <NavBar title={navbarTitle} />
                 <Container style={{ paddingTop: 5 + "%" }} maxWidth="lg">
-                    <Grid container spacing={3}>
-                        <Grid key="cartridges" xs={12} lg={4} item>
-                            <CartridesTable cartridges={cartridgesData} />
-                        </Grid>
-                        <Grid key="supplies" xs={12} lg={8} item>
-                            <SuppliesEditable
-                                data={suppliesData}
-                                cartridges={cartridgesData}
-                                handleSupplyDelete={this.handleSupplyDelete}
-                                handleSupplyCreate={this.handleSupplyCreate}
-                                handleSupplyUpdate={this.handleSupplyUpdate}
-                            />
-                        </Grid>
-                        <Grid key="orders" xs={12} lg={12} item>
-                            <OrdersTable
-                                data={ordersData}
-                                cartridges={cartridgesData}
-                            />
-                        </Grid>
-                    </Grid>
+                    <BrowserRouter>
+                        <Switch>
+                            <Route path="/" exact component={Home} />
+                        </Switch>
+                    </BrowserRouter>
                 </Container>
             </MuiThemeProvider>
         );

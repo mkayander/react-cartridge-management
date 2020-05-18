@@ -2,8 +2,12 @@ import React from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import { Paper } from "@material-ui/core";
+import { DoneAll, CheckCircle, LocalShipping } from "@material-ui/icons";
 
 import MaterialTable from "material-table";
+import localization from "../SuppliesEditable/localization";
+import FinishedStatus from "./FinishedStatus";
+import InWorkStatus from "./InWorkStatus";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -25,6 +29,7 @@ function OrdersTable({ data, cartridges }) {
     return (
         <MaterialTable
             title="Заказы"
+            localization={localization}
             columns={[
                 {
                     title: "Статус",
@@ -35,6 +40,12 @@ function OrdersTable({ data, cartridges }) {
                         true: "Завершён",
                         false: "В работе",
                     },
+                    render: (rowData) =>
+                        rowData.finished ? (
+                            <FinishedStatus />
+                        ) : (
+                            <InWorkStatus />
+                        ),
                 },
                 {
                     title: "Дата создания",
@@ -81,14 +92,23 @@ function OrdersTable({ data, cartridges }) {
                 actionsColumnIndex: -1,
             }}
             actions={[
-                {
+                (rowData) => ({
                     icon: "check",
-                    tooltip: "Выполнить заказ",
+                    tooltip: rowData.finished
+                        ? "Заказ уже завершён"
+                        : "Завершить заказ",
+                    disabled: rowData.finished,
                     onClick: (event, rowData) => {
                         console.log(event, rowData);
-                        alert(`Заказ ${rowData.number} выполнен`);
+                        if (!rowData.finished) {
+                            alert(`Заказ ${rowData.number} выполнен`);
+                        } else {
+                            alert(
+                                `Заказ ${rowData.number} уже является выполненным`
+                            );
+                        }
                     },
-                },
+                }),
             ]}
             editable={{
                 onRowAdd: (newData) =>

@@ -1,4 +1,4 @@
-import { createSupply, fetchSupplies, updateSupply, deleteSupply } from "./";
+// import { createSupply, fetchSupplies, updateSupply, deleteSupply } from "./";
 import { api } from "./api";
 
 export const supplyDao = {
@@ -13,6 +13,10 @@ export const supplyDao = {
         });
         console.log("createSupply:", supply);
     },
-    update: updateSupply,
-    delete: deleteSupply,
+    update: async (supply) => {
+        api.put(`supplies/${supply.id}/`, supply);
+    },
+    delete: async (id) => {
+        api.delete(`supplies/${id}/`);
+    },
 };
