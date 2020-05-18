@@ -102,7 +102,7 @@ function SuppliesEditable(props) {
                     }),
                 onRowDelete: (oldData) =>
                     new Promise((resolve) => {
-                        handleSupplyDelete(oldData.id);
+                        handleSupplyDelete(oldData);
                         resolve();
                     }),
             }}

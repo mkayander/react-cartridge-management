@@ -17,7 +17,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function OrdersTable({ data, cartridges }) {
+function OrdersTable({
+    data,
+    cartridges,
+    handleCreate,
+    handleUpdate,
+    handleDelete,
+}) {
     const classes = useStyles();
 
     let cartridgesChoices = {};
@@ -112,17 +118,17 @@ function OrdersTable({ data, cartridges }) {
             editable={{
                 onRowAdd: (newData) =>
                     new Promise((resolve) => {
-                        console.log(newData);
+                        handleCreate(newData);
                         resolve();
                     }),
                 onRowUpdate: (newData) =>
                     new Promise((resolve) => {
-                        console.log(newData);
+                        handleUpdate(newData);
                         resolve();
                     }),
                 onRowDelete: (oldData) =>
                     new Promise((resolve) => {
-                        console.log(oldData);
+                        handleDelete(oldData);
                         resolve();
                     }),
             }}

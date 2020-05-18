@@ -8,6 +8,8 @@ import { CartridesTable, SuppliesEditable, OrdersTable } from "../components";
 import { ordersDao } from "../api/orderDao";
 import { supplyDao } from "../api/supplyDao";
 import { cartridgeDao } from "../api/cartridgeDao";
+import { CommonApi } from "../api/CommonApi";
+import { api } from "../api/api";
 
 class Home extends Component {
     state = {
@@ -16,84 +18,109 @@ class Home extends Component {
         ordersData: [],
     };
 
-    dispError = (msg) => {
-        this.props.enqueueSnackbar(msg, { variant: "error" });
-        console.log("dispError:", msg);
+    displayActions = {
+        success: (msg) => {
+            this.props.enqueueSnackbar(msg, { variant: "success" });
+        },
+        error: (msg) => {
+            this.props.enqueueSnackbar(msg, { variant: "error" });
+            console.log("dispError:", msg);
+        },
+        msg: (msg) => {
+            this.props.enqueueSnackbar(msg);
+        },
     };
 
-    dispSuccess = (msg) => {
-        this.props.enqueueSnackbar(msg, { variant: "success" });
-    };
-
-    dispMsg = (msg) => {
-        this.props.enqueueSnackbar(msg);
+    events = {
+        error: this.dispError,
+        success: this.dispSuccess,
+        msg: this.dispMsg,
     };
 
     handleRefresh = () => {
-        cartridgeDao
-            .getAll()
-            .catch((reason) => this.dispError(reason))
-            .then((value) => this.setState({ cartridgesData: value }));
+        console.log("handleRefresh.start");
+        // cartridgeDao
+        //     .getAll()
+        //     .catch((reason) => this.dispError(reason))
+        //     .then((value) => this.setState({ cartridgesData: value }));
 
-        supplyDao
-            .getAll()
-            .catch((reason) => this.dispError(reason))
-            .then((value) => this.setState({ suppliesData: value }));
+        // supplyDao
+        //     .getAll()
+        //     .catch((reason) => this.dispError(reason))
+        //     .then((value) => this.setState({ suppliesData: value }));
 
-        // const supplies = await fetchSupplies();
-        ordersDao
-            .getAll()
-            .catch((reason) => this.dispError(reason))
-            .then((value) => this.setState({ ordersData: value }));
+        // ordersDao
+        //     .getAll()
+        //     .catch((reason) => this.dispError(reason))
+        //     .then((value) => this.setState({ ordersData: value }));
 
-        // this.setState({
-        //     cartridgesData: cartridges,
-        //     suppliesData: supplies,
-        //     ordersData: orders,
-        // });
+        api.get("cartridges/").then((value) => {
+            this.setState({ cartridgesData: value.data });
+        });
+
+        api.get("supplies/").then((value) => {
+            this.setState({ suppliesData: value.data });
+        });
+
+        api.get("orders/").then((value) => {
+            this.setState({ ordersData: value.data });
+        });
+
+        console.log("handleRefresh.end");
     };
 
-    handleSupplyDelete = (id) => {
-        supplyDao
-            .delete(id)
-            .catch((reason) => {
-                this.dispError("Не удалось выполнить удаление: \n" + reason);
-            })
-            .then(() => {
-                this.handleRefresh();
-                this.dispSuccess(`Перемещение №${id} удалено успешно!`);
-            });
-    };
+    supplyApi = new CommonApi(
+        "supplies/",
+        {
+            create: {
+                success: "Перемещение создано успешно!",
+                error: "Не удалось создать перемещение!",
+            },
+            update: {
+                success: "Перемещение обновлено успешно!",
+                error: "Не удалось обновить перемещение!",
+            },
+            delete: {
+                success: "Перемещение удалено успешно!",
+                error: "Не удалось удалить перемещение!",
+            },
+        },
+        {
+            refresh: this.handleRefresh,
+            success: this.displayActions.success,
+            error: this.displayActions.error,
+            msg: this.displayActions.msg,
+        }
+    );
 
-    handleSupplyCreate = (supply) => {
-        supplyDao
-            .create(supply)
-            .catch((reason) => this.dispError(reason))
-            .then((value) => {
-                console.log("handleSupplyCreate.then:", value);
-                this.handleRefresh();
-                this.dispSuccess(`Перемещение создано успешно!`);
-            });
-        // await createSupply(supply);
-        // await this.handleRefresh();
-    };
+    orderApi = new CommonApi(
+        "orders/",
+        {
+            create: {
+                success: "Заказ создан успешно!",
+                error: "Не удалось создать заказ!",
+            },
+            update: {
+                success: "Заказ обновлён успешно!",
+                error: "Не удалось обновить заказ!",
+            },
+            delete: {
+                success: "Заказ удалён успешно!",
+                error: "Не удалось удалить заказ!",
+            },
+        },
+        {
+            refresh: this.handleRefresh,
+            success: this.displayActions.success,
+            error: this.displayActions.error,
+            msg: this.displayActions.msg,
+        }
+    );
 
-    handleSupplyUpdate = (supply) => {
-        supplyDao
-            .update(supply)
-            .catch((reason) =>
-                this.dispError("Не удалось выполнить удаление: \n" + reason)
-            )
-            .then((value) => {
-                this.handleRefresh();
-                this.dispSuccess(
-                    `Перемещение №${supply.id} обновлено успешно!`
-                );
-            });
-    };
+    componentDidMount() {
+        this.handleRefresh();
 
-    async componentDidMount() {
-        await this.handleRefresh();
+        this.supplyApi.checkFields();
     }
 
     render() {
@@ -108,15 +135,21 @@ class Home extends Component {
                     <SuppliesEditable
                         data={suppliesData}
                         cartridges={cartridgesData}
-                        handleSupplyDelete={this.handleSupplyDelete}
-                        handleSupplyCreate={this.handleSupplyCreate}
-                        handleSupplyUpdate={this.handleSupplyUpdate}
+                        handleSupplyDelete={this.supplyApi.delete}
+                        handleSupplyCreate={this.supplyApi.create}
+                        handleSupplyUpdate={this.supplyApi.update}
+                        // handleSupplyDelete={this.handleSupplyDelete}
+                        // handleSupplyCreate={this.handleSupplyCreate}
+                        // handleSupplyUpdate={this.handleSupplyUpdate}
                     />
                 </Grid>
                 <Grid key="orders" xs={12} lg={12} item>
                     <OrdersTable
                         data={ordersData}
                         cartridges={cartridgesData}
+                        handleCreate={this.orderApi.create}
+                        handleUpdate={this.orderApi.update}
+                        handleDelete={this.orderApi.delete}
                     />
                 </Grid>
             </Grid>
