@@ -22,7 +22,7 @@ export class CommonApi {
             .catch((reason) => this.callbacks.error(reason));
     }
 
-    create = (instance) => {
+    create = async (instance) => {
         console.log("CommonApi.create", instance, this);
         api.post(this.path, instance)
             .catch((reason) => {
@@ -42,7 +42,7 @@ export class CommonApi {
             );
     };
 
-    update = (instance) => {
+    update = async (instance) => {
         console.log("CommonApi.update", instance);
         api.put(`${this.path}${instance.id}/`, instance)
             .catch((reason) => {
@@ -56,7 +56,7 @@ export class CommonApi {
             });
     };
 
-    delete = (instance) => {
+    delete = async (instance) => {
         console.log("CommonApi.delete", instance);
         api.delete(`${this.path}${instance.id}/`)
             .catch((reason) => {

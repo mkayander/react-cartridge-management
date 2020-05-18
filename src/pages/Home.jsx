@@ -37,7 +37,7 @@ class Home extends Component {
         msg: this.dispMsg,
     };
 
-    handleRefresh = () => {
+    handleRefresh = async () => {
         console.log("handleRefresh.start");
         // cartridgeDao
         //     .getAll()
@@ -54,15 +54,18 @@ class Home extends Component {
         //     .catch((reason) => this.dispError(reason))
         //     .then((value) => this.setState({ ordersData: value }));
 
-        api.get("cartridges/").then((value) => {
-            this.setState({ cartridgesData: value.data });
-        });
-
         api.get("supplies/").then((value) => {
+            console.log("supplies", value);
             this.setState({ suppliesData: value.data });
         });
 
+        api.get("cartridges/").then((value) => {
+            console.log("cartridges", value);
+            this.setState({ cartridgesData: value.data });
+        });
+
         api.get("orders/").then((value) => {
+            console.log("orders", value);
             this.setState({ ordersData: value.data });
         });
 
@@ -117,8 +120,8 @@ class Home extends Component {
         }
     );
 
-    componentDidMount() {
-        this.handleRefresh();
+    async componentDidMount() {
+        await this.handleRefresh();
 
         this.supplyApi.checkFields();
     }
