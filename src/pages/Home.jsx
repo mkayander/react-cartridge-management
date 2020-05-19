@@ -5,11 +5,8 @@ import { Grid, CircularProgress } from "@material-ui/core";
 import { withSnackbar } from "notistack";
 
 import { CartridesTable, SuppliesEditable, OrdersTable } from "../components";
-// import { ordersDao } from "../api/orderDao";
-// import { supplyDao } from "../api/supplyDao";
-// import { cartridgeDao } from "../api/cartridgeDao";
 import { CommonApi } from "../api/CommonApi";
-import { api } from "../api/api";
+import fetchAll from "../api";
 
 class Home extends Component {
     state = {
@@ -20,11 +17,6 @@ class Home extends Component {
 
     displayActions = {
         success: async (msg) => {
-            console.log(
-                "displayActions.success",
-                msg,
-                this.props.enqueueSnackbar
-            );
             this.props.enqueueSnackbar(msg, { variant: "success" });
         },
         error: async (msg) => {
@@ -36,10 +28,20 @@ class Home extends Component {
         },
     };
 
-    events = {
-        error: this.dispError,
-        success: this.dispSuccess,
-        msg: this.dispMsg,
+    handleRefresh = async () => {
+        fetchAll()
+            .catch((reason) => {
+                console.log(reason.body);
+                this.displayActions.error(reason);
+            })
+            .then((response) => {
+                const { cartridges, supplies, orders } = response.data;
+                this.setState({
+                    cartridgesData: cartridges,
+                    suppliesData: supplies,
+                    ordersData: orders,
+                });
+            });
     };
 
     supplyApi = new CommonApi(
@@ -59,7 +61,7 @@ class Home extends Component {
             },
         },
         {
-            // refresh: this.handleRefresh,
+            refreshAll: this.handleRefresh,
             setState: (value) => this.setState({ suppliesData: value }),
             success: this.displayActions.success,
             error: this.displayActions.error,
@@ -84,7 +86,7 @@ class Home extends Component {
             },
         },
         {
-            // refresh: this.handleRefresh,
+            refreshAll: this.handleRefresh,
             setState: (value) => this.setState({ ordersData: value }),
             success: this.displayActions.success,
             error: this.displayActions.error,
@@ -92,48 +94,8 @@ class Home extends Component {
         }
     );
 
-    handleRefresh = async () => {
-        console.log("handleRefresh.start");
-        // cartridgeDao
-        //     .getAll()
-        //     .catch((reason) => this.dispError(reason))
-        //     .then((value) => this.setState({ cartridgesData: value }));
-
-        // supplyDao
-        //     .getAll()
-        //     .catch((reason) => this.dispError(reason))
-        //     .then((value) => this.setState({ suppliesData: value }));
-
-        // ordersDao
-        //     .getAll()
-        //     .catch((reason) => this.dispError(reason))
-        //     .then((value) => this.setState({ ordersData: value }));
-
-        // api.get("supplies/").then((value) => {
-        //     console.log("supplies", value);
-        //     this.setState({ suppliesData: value.data });
-        // });
-
-        api.get("cartridges/").then((value) => {
-            console.log("cartridges", value);
-            this.setState({ cartridgesData: value.data });
-        });
-
-        // api.get("orders/").then((value) => {
-        //     console.log("orders", value);
-        //     this.setState({ ordersData: value.data });
-        // });
-
-        this.supplyApi.refresh();
-        this.orderApi.refresh();
-
-        console.log("handleRefresh.end");
-    };
-
     async componentDidMount() {
         await this.handleRefresh();
-
-        console.log(this.supplyApi, this.orderApi);
     }
 
     render() {
