@@ -7,23 +7,25 @@ export class CommonApi {
         this.callbacks = callbacks;
     }
 
-    checkFields() {
-        console.log(
-            "CommonApi.checkFields:",
-            this.messages,
-            this.path,
-            this.callbacks
-        );
-    }
+    // checkFields() {
+    //     console.log(
+    //         "CommonApi.checkFields:",
+    //         this.messages,
+    //         this.path,
+    //         this.callbacks
+    //     );
+    // }
 
-    getAll() {
+    refresh() {
+        console.log("CommonApi.getAll");
         return api
             .get(this.path)
-            .catch((reason) => this.callbacks.error(reason));
+            .catch((reason) => this.callbacks.error(reason))
+            .then((response) => this.callbacks.setState(response.data));
     }
 
     create = async (instance) => {
-        console.log("CommonApi.create", instance, this);
+        // console.log("CommonApi.create", instance, this);
         api.post(this.path, instance)
             .catch((reason) => {
                 this.callbacks.error(
@@ -33,9 +35,14 @@ export class CommonApi {
             })
             .then(
                 () => {
-                    this.callbacks.refresh();
+                    // this.callbacks.refresh();
+                    this.refresh();
                     this.callbacks.success(this.messages.create.success);
-                    console.log("CommonApi.create.then");
+                    // console.log(
+                    //     "CommonApi.create.then",
+                    //     this.callbacks.success,
+                    //     this.messages.create.success
+                    // );
                 },
                 (reason) =>
                     console.log("CommonApi.create.then.onrejected:", reason)
@@ -43,7 +50,7 @@ export class CommonApi {
     };
 
     update = async (instance) => {
-        console.log("CommonApi.update", instance);
+        // console.log("CommonApi.update", instance);
         api.put(`${this.path}${instance.id}/`, instance)
             .catch((reason) => {
                 this.callbacks.error(
@@ -51,13 +58,14 @@ export class CommonApi {
                 );
             })
             .then(() => {
-                this.callbacks.refresh();
+                // this.callbacks.refresh();
+                this.refresh();
                 this.callbacks.success(this.messages.update.success);
             });
     };
 
     delete = async (instance) => {
-        console.log("CommonApi.delete", instance);
+        // console.log("CommonApi.delete", instance);
         api.delete(`${this.path}${instance.id}/`)
             .catch((reason) => {
                 this.callbacks.error(
@@ -65,7 +73,8 @@ export class CommonApi {
                 );
             })
             .then(() => {
-                this.callbacks.refresh();
+                // this.callbacks.refresh();
+                this.refresh();
                 this.callbacks.success(this.messages.delete.success);
             });
     };

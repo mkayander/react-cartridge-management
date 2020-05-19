@@ -8,6 +8,8 @@ import tinycolor from "tinycolor2";
 import MaterialTable from "material-table";
 import localization from "./localization";
 
+import { useSnackbar } from "notistack";
+
 const useStyles = makeStyles((theme) => ({
     root: {
         borderTop: theme.tables.borderSize,
@@ -30,6 +32,8 @@ function SuppliesEditable(props) {
         handleSupplyCreate,
     } = props;
 
+    // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
     const classes = useStyles();
     const theme = useTheme();
 
@@ -48,23 +52,6 @@ function SuppliesEditable(props) {
             (cartridgesChoices[item.name] = `${item.manufacturer} ${item.name}`)
     );
 
-    const columns = [
-        { title: "Дата", field: "date", type: "datetime", editable: "never" },
-        {
-            title: "Событие",
-            field: "out",
-            initialEditValue: "true",
-            lookup: { true: "Выдача", false: "Поступление" },
-        },
-        {
-            title: "Картридж",
-            field: "cartridge",
-            lookup: cartridgesChoices,
-        },
-        { title: "Количество", field: "count", type: "numeric" },
-        { title: "Комментарий", field: "comment" },
-    ];
-
     return (
         <MaterialTable
             isLoading={data.length > 0 ? false : true}
@@ -79,7 +66,27 @@ function SuppliesEditable(props) {
             }}
             localization={localization}
             title="Перемещение Картриджей"
-            columns={columns}
+            columns={[
+                {
+                    title: "Дата",
+                    field: "date",
+                    type: "datetime",
+                    editable: "never",
+                },
+                {
+                    title: "Событие",
+                    field: "out",
+                    initialEditValue: "true",
+                    lookup: { true: "Выдача", false: "Поступление" },
+                },
+                {
+                    title: "Картридж",
+                    field: "cartridge",
+                    lookup: cartridgesChoices,
+                },
+                { title: "Количество", field: "count", type: "numeric" },
+                { title: "Комментарий", field: "comment" },
+            ]}
             data={data}
             options={{
                 exportButton: true,
@@ -93,16 +100,19 @@ function SuppliesEditable(props) {
                 onRowAdd: (newData) =>
                     new Promise((resolve) => {
                         handleSupplyCreate(prepareData(newData));
+                        // enqueueSnackbar("Перемещение добавлено");
                         resolve();
                     }),
                 onRowUpdate: (newData) =>
                     new Promise((resolve) => {
                         handleSupplyUpdate(prepareData(newData));
+                        // enqueueSnackbar("Перемещение обновлено");
                         resolve();
                     }),
                 onRowDelete: (oldData) =>
                     new Promise((resolve) => {
                         handleSupplyDelete(oldData);
+                        // enqueueSnackbar("Перемещение удалено");
                         resolve();
                     }),
             }}

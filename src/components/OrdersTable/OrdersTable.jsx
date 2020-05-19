@@ -9,6 +9,8 @@ import localization from "../SuppliesEditable/localization";
 import FinishedStatus from "./FinishedStatus";
 import InWorkStatus from "./InWorkStatus";
 
+import { useSnackbar } from "notistack";
+
 const useStyles = makeStyles((theme) => ({
     root: {
         borderTop: theme.tables.borderSize,
@@ -25,6 +27,8 @@ function OrdersTable({
     handleDelete,
 }) {
     const classes = useStyles();
+
+    // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     let cartridgesChoices = {};
     cartridges.forEach(
@@ -119,16 +123,19 @@ function OrdersTable({
                 onRowAdd: (newData) =>
                     new Promise((resolve) => {
                         handleCreate(newData);
+                        // enqueueSnackbar("Заказ добавлен");
                         resolve();
                     }),
                 onRowUpdate: (newData) =>
                     new Promise((resolve) => {
                         handleUpdate(newData);
+                        // enqueueSnackbar("Заказ обновлён");
                         resolve();
                     }),
                 onRowDelete: (oldData) =>
                     new Promise((resolve) => {
                         handleDelete(oldData);
+                        // enqueueSnackbar("Заказ удалён");
                         resolve();
                     }),
             }}
