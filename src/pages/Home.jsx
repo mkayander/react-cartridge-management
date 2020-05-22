@@ -20,7 +20,7 @@ class Home extends Component {
             this.props.enqueueSnackbar(msg, { variant: "success" });
         },
         error: async (msg) => {
-            this.props.enqueueSnackbar(msg, { variant: "error" });
+            this.props.enqueueSnackbar(`${msg}`, { variant: "error" });
             console.log("dispError:", msg);
         },
         msg: async (msg) => {
@@ -35,12 +35,14 @@ class Home extends Component {
                 this.displayActions.error(reason);
             })
             .then((response) => {
-                const { cartridges, supplies, orders } = response.data;
-                this.setState({
-                    cartridgesData: cartridges,
-                    suppliesData: supplies,
-                    ordersData: orders,
-                });
+                if (response) {
+                    const { cartridges, supplies, orders } = response.data;
+                    this.setState({
+                        cartridgesData: cartridges,
+                        suppliesData: supplies,
+                        ordersData: orders,
+                    });
+                }
             });
     };
 
