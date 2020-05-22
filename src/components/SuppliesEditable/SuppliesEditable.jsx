@@ -25,6 +25,7 @@ const prepareData = (supply) => {
 
 function SuppliesEditable(props) {
     const {
+        isLoading,
         data,
         cartridges,
         handleSupplyDelete,
@@ -54,7 +55,7 @@ function SuppliesEditable(props) {
 
     return (
         <MaterialTable
-            isLoading={data.length > 0 ? false : true}
+            isLoading={isLoading}
             components={{
                 Container: (props) => (
                     <Paper
