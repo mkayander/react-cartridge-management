@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Grid, CircularProgress } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
 import { withSnackbar } from "notistack";
 

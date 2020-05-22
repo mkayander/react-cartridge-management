@@ -8,7 +8,7 @@ import tinycolor from "tinycolor2";
 import MaterialTable from "material-table";
 import localization from "./localization";
 
-import { useSnackbar } from "notistack";
+// import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
     root: {
