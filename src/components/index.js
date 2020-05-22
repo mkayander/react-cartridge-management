@@ -3,3 +3,4 @@ export { default as SuppliesTable } from "./SuppliesTable/SuppliesTable";
 export { default as OrdersTable } from "./OrdersTable/OrdersTable";
 export { default as SuppliesEditable } from "./SuppliesEditable/SuppliesEditable";
 export { default as NavBar } from "./NavBar/NavBar";
+export { default as Chat } from "./Chat/Chat";

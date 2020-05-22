@@ -4,7 +4,12 @@ import { Grid, CircularProgress } from "@material-ui/core";
 
 import { withSnackbar } from "notistack";
 
-import { CartridesTable, SuppliesEditable, OrdersTable } from "../components";
+import {
+    CartridesTable,
+    SuppliesEditable,
+    OrdersTable,
+    Chat,
+} from "../components";
 import { CommonApi } from "../api/CommonApi";
 import fetchAll from "../api";
 
@@ -130,6 +135,9 @@ class Home extends Component {
                         handleUpdate={this.orderApi.update}
                         handleDelete={this.orderApi.delete}
                     />
+                </Grid>
+                <Grid>
+                    <Chat />
                 </Grid>
             </Grid>
         );
