@@ -90,7 +90,7 @@ export class Chat extends Component {
                 persist: true,
                 preventDuplicate: true,
                 action: (key) => (
-                    <Button onClick={() => this.connect()}>
+                    <Button color="inherit" onClick={() => this.connect()}>
                         Переподключится
                     </Button>
                 ),

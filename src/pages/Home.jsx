@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Grid, CircularProgress } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
 import { withSnackbar } from "notistack";
 
@@ -15,6 +15,7 @@ import fetchAll from "../api";
 
 class Home extends Component {
     state = {
+        loading: false,
         cartridgesData: [],
         suppliesData: [],
         ordersData: [],
@@ -35,6 +36,8 @@ class Home extends Component {
     };
 
     handleRefresh = async () => {
+        this.setState({ loading: true });
+        console.log("handleRefresh");
         fetchAll()
             .catch((reason) => {
                 console.log(reason);
@@ -76,7 +79,8 @@ class Home extends Component {
         },
         {
             refreshAll: this.handleRefresh,
-            setState: (value) => this.setState({ suppliesData: value }),
+            // setState: (value) => this.setState({ suppliesData: value }),
+            setLoading: (bool) => this.setState({ loading: bool }),
             success: this.displayActions.success,
             error: this.displayActions.error,
             msg: this.displayActions.msg,
@@ -101,7 +105,7 @@ class Home extends Component {
         },
         {
             refreshAll: this.handleRefresh,
-            setState: (value) => this.setState({ ordersData: value }),
+            setLoading: (bool) => this.setState({ loading: bool }),
             success: this.displayActions.success,
             error: this.displayActions.error,
             msg: this.displayActions.msg,
@@ -114,24 +118,25 @@ class Home extends Component {
 
     render() {
         const {
+            chatMessageHistory,
+            loading,
             cartridgesData,
             suppliesData,
             ordersData,
-            chatMessageHistory,
         } = this.state;
 
         return (
             <Grid container spacing={3}>
-                <Grid key="progress" xs={12} item>
-                    {/* <LinearProgress variant="indeterminate" color="secondary" /> */}
+                {/* <Grid key="progress" xs={12} item>
                     <CircularProgress />
                     <CircularProgress disableShrink />
-                </Grid>
+                </Grid> */}
                 <Grid key="cartridges" xs={12} lg={4} item>
                     <CartridesTable cartridges={cartridgesData} />
                 </Grid>
                 <Grid key="supplies" xs={12} lg={8} item>
                     <SuppliesEditable
+                        isLoading={loading}
                         data={suppliesData}
                         cartridges={cartridgesData}
                         handleSupplyDelete={this.supplyApi.delete}
@@ -141,6 +146,7 @@ class Home extends Component {
                 </Grid>
                 <Grid key="orders" xs={12} lg={12} item>
                     <OrdersTable
+                        isLoading={loading}
                         data={ordersData}
                         cartridges={cartridgesData}
                         handleCreate={this.orderApi.create}

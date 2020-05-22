@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function OrdersTable({
+    isLoading,
     data,
     cartridges,
     handleCreate,
@@ -36,7 +37,7 @@ function OrdersTable({
 
     return (
         <MaterialTable
-            isLoading={data.length > 0 ? false : true}
+            isLoading={isLoading}
             title="Заказы"
             localization={localization}
             columns={[
