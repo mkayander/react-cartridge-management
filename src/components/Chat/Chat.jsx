@@ -1,12 +1,17 @@
 import React, { Component } from "react";
 import { withSnackbar } from "notistack";
 
-import { Widget, addResponseMessage } from "react-chat-widget";
+import {
+    Widget,
+    addResponseMessage,
+    addUserMessage,
+    markAllAsRead,
+} from "react-chat-widget";
 import "react-chat-widget/lib/styles.css";
 import { Button } from "@material-ui/core";
+import { getCookie } from "../../utils/getCookie";
 
 export class Chat extends Component {
-    key = this.props;
     state = {
         user: null,
         ws: null,
@@ -26,9 +31,21 @@ export class Chat extends Component {
         );
     };
 
+    chatHistoryLoad() {
+        this.props.data.forEach((element) => {
+            if (element.user === this.state.user) {
+                addUserMessage(element.message);
+            } else {
+                addResponseMessage(element.message);
+            }
+        });
+        markAllAsRead();
+    }
+
     connect = () => {
         var ws = new WebSocket(
-            "ws://" + window.location.host.split(":")[0] + "/ws/chat/"
+            // "ws://" + window.location.host.split(":")[0] + "/chat"
+            "ws://it-vlshv.dellin.local/chat"
         );
 
         ws.onmessage = (e) => {
@@ -43,12 +60,27 @@ export class Chat extends Component {
         // websocket onopen event listener
         ws.onopen = () => {
             console.log("connected websocket main component");
+
             this.props.closeSnackbar();
 
             this.setState({
                 ws: ws,
-                user: Math.random(),
             });
+
+            let username = getCookie("name");
+
+            if (username !== undefined) {
+                this.setState({
+                    user: username,
+                });
+            } else {
+                username = Math.random();
+                document.cookie = "name=" + username;
+                this.setState({
+                    user: username,
+                });
+            }
+            console.log(username);
         };
 
         // websocket onclose event listener
@@ -85,6 +117,7 @@ export class Chat extends Component {
 
     render() {
         if (this.state.ws !== null) {
+            this.chatHistoryLoad();
             return (
                 <Widget
                     handleNewUserMessage={this.handleNewUserMessage}

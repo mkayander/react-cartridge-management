@@ -18,6 +18,7 @@ class Home extends Component {
         cartridgesData: [],
         suppliesData: [],
         ordersData: [],
+        chatMessageHistory: [],
     };
 
     displayActions = {
@@ -36,16 +37,22 @@ class Home extends Component {
     handleRefresh = async () => {
         fetchAll()
             .catch((reason) => {
-                console.log(reason.body);
+                console.log(reason);
                 this.displayActions.error(reason);
             })
             .then((response) => {
                 if (response) {
-                    const { cartridges, supplies, orders } = response.data;
+                    const {
+                        cartridges,
+                        supplies,
+                        orders,
+                        chatMessage,
+                    } = response.data;
                     this.setState({
                         cartridgesData: cartridges,
                         suppliesData: supplies,
                         ordersData: orders,
+                        chatMessageHistory: chatMessage,
                     });
                 }
             });
@@ -106,7 +113,12 @@ class Home extends Component {
     }
 
     render() {
-        const { cartridgesData, suppliesData, ordersData } = this.state;
+        const {
+            cartridgesData,
+            suppliesData,
+            ordersData,
+            chatMessageHistory,
+        } = this.state;
 
         return (
             <Grid container spacing={3}>
@@ -137,7 +149,7 @@ class Home extends Component {
                     />
                 </Grid>
                 <Grid>
-                    <Chat />
+                    <Chat data={chatMessageHistory} />
                 </Grid>
             </Grid>
         );
