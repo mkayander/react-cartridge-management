@@ -54,7 +54,6 @@ export class App extends Component {
             <BrowserRouter>
                 <MuiThemeProvider theme={theme}>
                     <SnackbarProvider
-                        // maxSnack={3}
                         ref={this.notistackRef}
                         action={(key) => (
                             <IconButton

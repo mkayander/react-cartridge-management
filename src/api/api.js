@@ -1,8 +1,12 @@
 import axios from "axios";
+import { getApiUrl } from "./urls";
+
+const apiUrl = getApiUrl();
+console.log(apiUrl);
 
 export const api = axios.create({
-    baseURL: "http://it-vlshv.dellin.local/api/",
+    // baseURL: "http://it-vlshv.dellin.local/api/",
     // baseURL: "http://" + window.location.host + "/api/",
-    // baseURL: "http://127.0.0.1:8000/api/",
+    baseURL: getApiUrl(),
     responseType: "json",
 });

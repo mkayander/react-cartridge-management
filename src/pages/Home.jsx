@@ -39,9 +39,10 @@ class Home extends Component {
         this.setState({ loading: true });
         console.log("handleRefresh");
         fetchAll()
-            .catch((reason) => {
-                console.log(reason);
-                this.displayActions.error(reason);
+            .catch((error) => {
+                console.log(error.response);
+                console.log(error, error.response.data);
+                this.displayActions.error(error);
             })
             .then((response) => {
                 if (response) {
@@ -58,7 +59,8 @@ class Home extends Component {
                         chatMessageHistory: chatMessage,
                     });
                 }
-            });
+            })
+            .finally(() => this.setState({ loading: false }));
     };
 
     supplyApi = new CommonApi(

@@ -10,6 +10,7 @@ import {
 import "react-chat-widget/lib/styles.css";
 import { Button } from "@material-ui/core";
 import { getCookie } from "../../utils/getCookie";
+import { getWsChatUrl } from "../../api/urls";
 
 export class Chat extends Component {
     state = {
@@ -45,7 +46,8 @@ export class Chat extends Component {
     connect = () => {
         var ws = new WebSocket(
             // "ws://" + window.location.host.split(":")[0] + "/chat"
-            "ws://it-vlshv.dellin.local/chat"
+            // "ws://it-vlshv.dellin.local/chat"
+            getWsChatUrl()
         );
 
         ws.onmessage = (e) => {
@@ -105,11 +107,7 @@ export class Chat extends Component {
 
         // websocket onerror event listener
         ws.onerror = (err) => {
-            console.error(
-                "Socket encountered error: ",
-                err.message,
-                "Closing socket"
-            );
+            console.error("Socket encountered error: ", err, "Closing socket");
 
             ws.close();
         };
