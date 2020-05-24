@@ -12,6 +12,8 @@ import { Button } from "@material-ui/core";
 import { getCookie } from "../../utils/getCookie";
 import { getWsChatUrl } from "../../api/urls";
 
+import styles from "./Chat.module.css";
+
 export class Chat extends Component {
     state = {
         user: null,
@@ -62,6 +64,8 @@ export class Chat extends Component {
         // websocket onopen event listener
         ws.onopen = () => {
             console.log("connected websocket main component");
+
+            this.chatHistoryLoad();
 
             this.props.closeSnackbar();
 
@@ -115,13 +119,16 @@ export class Chat extends Component {
 
     render() {
         if (this.state.ws !== null) {
-            this.chatHistoryLoad();
+            console.log(styles);
             return (
-                <Widget
-                    handleNewUserMessage={this.handleNewUserMessage}
-                    title="Чат"
-                    subtitle={"User id " + this.state.user}
-                />
+                <div className={styles["rcw-widget-container"]}>
+                    <Widget
+                        theme={styles}
+                        handleNewUserMessage={this.handleNewUserMessage}
+                        title="Чат"
+                        subtitle={"User id " + this.state.user}
+                    />
+                </div>
             );
         }
         return null;

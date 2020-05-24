@@ -1,6 +1,8 @@
+const localAddresses = ["localhost", "127.0.0.1"];
+
 export function getHostname() {
     const { hostname } = window.location;
-    const port = hostname === "localhost" ? ":8000" : "";
+    const port = localAddresses.includes(hostname) ? ":8000" : "";
     return hostname + port;
 }
 
