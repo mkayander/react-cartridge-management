@@ -45,6 +45,10 @@ export class Chat extends Component {
         );
     };
 
+    divider = () =>{
+        return <div className={styles["rcw-divider"]}>------start new messages-------</div>
+    };
+
     chatHistoryLoad() {
         this.props.data.forEach((element) => {
             // addResponseMessage(element.message);
@@ -53,6 +57,7 @@ export class Chat extends Component {
                 client: element.user === this.state.user,
             });
         });
+        renderCustomComponent(this.divider, null);
         markAllAsRead();
     }
 

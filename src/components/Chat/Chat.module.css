@@ -18,3 +18,12 @@
     background-color: black;
     color: white;
 }
+
+.rcw-divider {
+    background-color: red;
+    border-radius: 10px;
+    padding: 3px;
+    margin: 3px;
+    text-align: right;
+    margin-left: 60px;
+}
