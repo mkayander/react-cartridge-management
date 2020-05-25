@@ -25,6 +25,12 @@ export class Chat extends Component {
         this.connect();
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.data.message !== prevProps.data.message){
+            console.log("into if");
+        }
+    }
+
     handleNewUserMessage = (newMessage) => {
         this.state.ws.send(
             JSON.stringify({
@@ -119,7 +125,6 @@ export class Chat extends Component {
 
     render() {
         if (this.state.ws !== null) {
-            console.log(styles);
             return (
                 <div className={styles["rcw-widget-container"]}>
                     <Widget
