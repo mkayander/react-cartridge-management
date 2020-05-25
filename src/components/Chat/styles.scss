@@ -1,0 +1,51 @@
+@mixin message-bubble($color) {
+  background-color: $color;
+  border-radius: 10px;
+  padding: 15px;
+  max-width: 215px;
+  text-align: left;
+}
+
+
+.rcw-message {
+  margin: 10px;
+  display: flex;
+  word-wrap: break-word;
+}
+
+.rcw-timestamp {
+  font-size: 10px;
+  margin-top: 5px;
+}
+
+.rcw-client {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+
+  .rcw-message-text {
+    //@include message-bubble($turqois-2);
+  //message-bubble(#a3eaf7);
+  }
+
+  .rcw-timestamp {
+    align-self: flex-end;
+  }
+}
+
+.rcw-response {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  .rcw-message-text {
+    //@include message-bubble($grey-2);
+    background-color: #f4f7f9;
+    border-radius: 10px;
+    padding: 15px;
+    max-width: 215px;
+    text-align: left;
+  }
+}
+
+/* For markdown elements created with default styles */

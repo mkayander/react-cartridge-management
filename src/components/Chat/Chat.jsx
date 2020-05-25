@@ -5,7 +5,7 @@ import {
     Widget,
     addResponseMessage,
     addUserMessage,
-    markAllAsRead,
+    markAllAsRead, renderCustomComponent,
 } from "react-chat-widget";
 import "react-chat-widget/lib/styles.css";
 import { Button } from "@material-ui/core";
@@ -13,6 +13,7 @@ import { getCookie } from "../../utils/getCookie";
 import { getWsChatUrl } from "../../api/urls";
 
 import styles from "./Chat.module.css";
+import CustomMessage from "./CustomMessage";
 
 export class Chat extends Component {
     state = {
@@ -26,8 +27,8 @@ export class Chat extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.data.message !== prevProps.data.message){
-            console.log("into if");
+        if (this.props.data !== undefined && (this.props.data.length !== prevProps.data.length)){
+            this.chatHistoryLoad();
         }
     }
 
@@ -42,6 +43,8 @@ export class Chat extends Component {
 
     chatHistoryLoad() {
         this.props.data.forEach((element) => {
+            renderCustomComponent(CustomMessage, element);
+            // addResponseMessage(element.message);
             if (element.user === this.state.user) {
                 addUserMessage(element.message);
             } else {
