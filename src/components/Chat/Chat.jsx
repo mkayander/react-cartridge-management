@@ -43,14 +43,9 @@ export class Chat extends Component {
 
     chatHistoryLoad() {
         this.props.data.forEach((element) => {
-            renderCustomComponent(CustomMessage, element);
             // addResponseMessage(element.message);
-            if (element.user === this.state.user) {
-                addUserMessage(element.message);
-            } else {
-                addResponseMessage(element.message);
-            }
-        });
+                renderCustomComponent(CustomMessage, {msgData:element, client: element.user === this.state.user});
+            });
         markAllAsRead();
     }
 
