@@ -1,5 +1,5 @@
 // const localAddresses = ["localhost", "127.0.0.1"];
-const productionPorts = [80, 443];
+const productionPorts = ["80", "443"];
 
 export function getHostname() {
     const { hostname } = window.location;

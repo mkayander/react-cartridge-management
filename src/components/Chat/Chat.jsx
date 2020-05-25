@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { withSnackbar } from "notistack";
+import Divider from '@material-ui/core/Divider';
 
 import {
     Widget,
     addResponseMessage,
-    // addUserMessage,
     markAllAsRead,
     renderCustomComponent,
 } from "react-chat-widget";
@@ -45,6 +45,10 @@ export class Chat extends Component {
         );
     };
 
+    divider = () =>{
+        return <hr className={styles["rcw-divider"]} />
+    };
+
     chatHistoryLoad() {
         this.props.data.forEach((element) => {
             // addResponseMessage(element.message);
@@ -53,6 +57,7 @@ export class Chat extends Component {
                 client: element.user === this.state.user,
             });
         });
+        renderCustomComponent(Divider, {orientation: 'horizontal'});
         markAllAsRead();
     }
 
