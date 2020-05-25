@@ -4,7 +4,7 @@ import { withSnackbar } from "notistack";
 import {
     Widget,
     addResponseMessage,
-    addUserMessage,
+    // addUserMessage,
     markAllAsRead,
     renderCustomComponent,
 } from "react-chat-widget";
