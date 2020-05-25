@@ -13,7 +13,7 @@ import { Button } from "@material-ui/core";
 import { getCookie } from "../../utils/getCookie";
 import { getWsChatUrl } from "../../api/urls";
 
-import styles from "./Chat.module.css";
+import styles from "./Chat.module.scss";
 import CustomMessage from "./CustomMessage";
 
 export class Chat extends Component {
@@ -46,7 +46,7 @@ export class Chat extends Component {
     };
 
     divider = () =>{
-        return <div className={styles["rcw-divider"]}>------start new messages-------</div>
+        return <hr className={styles["rcw-divider"]} data-content="new messages" />
     };
 
     chatHistoryLoad() {
