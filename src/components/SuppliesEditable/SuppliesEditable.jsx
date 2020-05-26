@@ -6,7 +6,7 @@ import { Paper } from "@material-ui/core";
 import tinycolor from "tinycolor2";
 
 import MaterialTable from "material-table";
-import localization from "./localization";
+import matTablelocalization from "../../utils/localizations";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -63,7 +63,7 @@ function SuppliesEditable(props) {
                     />
                 ),
             }}
-            localization={localization}
+            localization={matTablelocalization}
             title="Перемещение Картриджей"
             columns={[
                 {

@@ -5,9 +5,9 @@ import { Paper } from "@material-ui/core";
 // import { DoneAll, CheckCircle, LocalShipping } from "@material-ui/icons";
 
 import MaterialTable from "material-table";
-import localization from "../SuppliesEditable/localization";
 import FinishedStatus from "./FinishedStatus";
 import InWorkStatus from "./InWorkStatus";
+import matTablelocalization from "../../utils/localizations";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,16 +39,17 @@ function OrdersTable({
         <MaterialTable
             isLoading={isLoading}
             title="Заказы"
-            localization={localization}
+            localization={matTablelocalization}
             columns={[
                 {
                     title: "Статус",
-                    field: "finished",
+                    field: "status",
                     // editable: "onUpdate",
                     initialEditValue: "false",
                     lookup: {
-                        true: "Завершён",
-                        false: "В работе",
+                        finished: "Завершён",
+                        work: "В работе",
+                        pending: "Обработка заказа",
                     },
                     render: (rowData) =>
                         rowData.finished ? (
