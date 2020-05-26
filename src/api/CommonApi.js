@@ -22,6 +22,7 @@ export class CommonApi {
                     this.messages.create.error + " \n " + reason
                 );
                 console.log("CommonApi.create.catch", reason.body);
+                throw reason;
             })
             .then(
                 () => {

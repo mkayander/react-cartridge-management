@@ -51,10 +51,10 @@ class MobileHome extends Component {
 
     displayActions = {
         success: async (msg) => {
-            this.props.enqueueSnackbar(msg, {variant: "success"});
+            this.props.enqueueSnackbar(msg, {variant: "success", persist: true});
         },
         error: async (msg) => {
-            this.props.enqueueSnackbar(`${msg}`, {variant: "error"});
+            this.props.enqueueSnackbar(`${msg}`, {variant: "error", persist: true});
             console.log("dispError:", msg);
         },
         msg: async (msg) => {
