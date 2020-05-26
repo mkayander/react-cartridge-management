@@ -5,9 +5,9 @@ import { Paper } from "@material-ui/core";
 // import { DoneAll, CheckCircle, LocalShipping } from "@material-ui/icons";
 
 import MaterialTable from "material-table";
-import localization from "../SuppliesEditable/localization";
 import FinishedStatus from "./FinishedStatus";
 import InWorkStatus from "./InWorkStatus";
+import localization from "../../utils/m-t-localization";
 
 const useStyles = makeStyles((theme) => ({
     root: {

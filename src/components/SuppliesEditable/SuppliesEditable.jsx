@@ -6,7 +6,7 @@ import { Paper } from "@material-ui/core";
 import tinycolor from "tinycolor2";
 
 import MaterialTable from "material-table";
-import localization from "./localization";
+import localization from "../../utils/m-t-localization";
 
 const useStyles = makeStyles((theme) => ({
     root: {

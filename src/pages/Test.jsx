@@ -7,7 +7,7 @@ function Test() {
         <div>
             <h1>Test page</h1>
             <hr />
-            <hr className="hr-text" data-content="TEST TEST test" />
+            <hr className={styles["hr-text"]} data-content="TEST TEST test" />
         </div>
     );
 }
