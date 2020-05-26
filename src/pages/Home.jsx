@@ -138,36 +138,37 @@ class Home extends Component {
                     <CircularProgress />
                     <CircularProgress disableShrink />
                 </Grid> */}
-                <Grid key="cartridges" xs={12} lg={4} item>
-                    <CartridesTable cartridges={cartridgesData} />
-                </Grid>
-                <Grid key="supplies" xs={12} lg={8} item>
-                    <SuppliesEditable
-                        isLoading={loading}
-                        data={suppliesData}
-                        cartridges={cartridgesData}
-                        handleSupplyDelete={this.supplyApi.delete}
-                        handleSupplyCreate={this.supplyApi.create}
-                        handleSupplyUpdate={this.supplyApi.update}
-                    />
-                </Grid>
-                <Grid key="orders" xs={12} lg={12} item>
-                    <OrdersTable
-                        isLoading={loading}
-                        data={ordersData}
-                        cartridges={cartridgesData}
-                        handleCreate={this.orderApi.create}
-                        handleUpdate={this.orderApi.update}
-                        handleDelete={this.orderApi.delete}
-                    />
-                </Grid>
+                    <Grid key="cartridges" xs={12} lg={4} item>
+                        <CartridesTable cartridges={cartridgesData}/>
+                    </Grid>
+                    <Grid key="supplies" xs={12} lg={8} item>
+                        <SuppliesEditable
+                            isLoading={loading}
+                            data={suppliesData}
+                            cartridges={cartridgesData}
+                            handleSupplyDelete={this.supplyApi.delete}
+                            handleSupplyCreate={this.supplyApi.create}
+                            handleSupplyUpdate={this.supplyApi.update}
+                        />
+                    </Grid>
+                    <Grid key="orders" xs={12} lg={12} item>
+                        <OrdersTable
+                            isLoading={loading}
+                            data={ordersData}
+                            cartridges={cartridgesData}
+                            handleCreate={this.orderApi.create}
+                            handleUpdate={this.orderApi.update}
+                            handleDelete={this.orderApi.delete}
+                        />
+                    </Grid>
 
-                {/* FIXME: Chat area overlaps the clickability of objects underneath it
+                    {/* FIXME: Chat area overlaps the clickability of objects underneath it
                 <Grid>
                     <Chat data={chatMessageHistory} />
                 </Grid> */}
-            </Grid>
-        );
+                </Grid>
+            );
+        }
     }
 }
 
