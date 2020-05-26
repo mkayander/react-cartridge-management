@@ -7,7 +7,7 @@ import { Paper } from "@material-ui/core";
 import MaterialTable from "material-table";
 import FinishedStatus from "./FinishedStatus";
 import InWorkStatus from "./InWorkStatus";
-import localization from "../../utils/m-t-localization";
+import matTablelocalization from "../../utils/localizations";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,7 +39,7 @@ function OrdersTable({
         <MaterialTable
             isLoading={isLoading}
             title="Заказы"
-            localization={localization}
+            localization={matTablelocalization}
             columns={[
                 {
                     title: "Статус",

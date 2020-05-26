@@ -1,4 +1,4 @@
-const localization = {
+const matTablelocalization = {
     pagination: {
         labelDisplayedRows: "{from}-{to} из {count}",
         labelRowsSelect: "строк",
@@ -30,4 +30,4 @@ const localization = {
     },
 };
 
-export default localization;
+export default matTablelocalization;
