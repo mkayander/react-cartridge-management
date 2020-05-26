@@ -43,12 +43,13 @@ function OrdersTable({
             columns={[
                 {
                     title: "Статус",
-                    field: "finished",
+                    field: "status",
                     // editable: "onUpdate",
                     initialEditValue: "false",
                     lookup: {
-                        true: "Завершён",
-                        false: "В работе",
+                        finished: "Завершён",
+                        work: "В работе",
+                        pending: "Обработка заказа",
                     },
                     render: (rowData) =>
                         rowData.finished ? (

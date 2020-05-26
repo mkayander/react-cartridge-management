@@ -156,9 +156,9 @@ class Home extends Component {
                         handleDelete={this.orderApi.delete}
                     />
                 </Grid>
-                <Grid>
+                {/* <Grid>
                     <Chat data={chatMessageHistory} />
-                </Grid>
+                </Grid> */}
             </Grid>
         );
     }
