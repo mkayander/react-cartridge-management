@@ -15,7 +15,7 @@ const localization = {
         actions: "Действия",
     },
     body: {
-        emptyDataSourceMessage: "Загрузка",
+        emptyDataSourceMessage: "Записи отсутствуют",
         addTooltip: "Добавить",
         deleteTooltip: "Удалить",
         editTooltip: "Редактировать",
