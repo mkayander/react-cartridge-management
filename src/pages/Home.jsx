@@ -41,7 +41,6 @@ class Home extends Component {
         fetchAll()
             .catch((error) => {
                 console.log(error.response);
-                console.log(error, error.response.data);
                 this.displayActions.error(error);
             })
             .then((response) => {
