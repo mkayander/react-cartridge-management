@@ -120,7 +120,7 @@ class Home extends Component {
 
     render() {
         const {
-            chatMessageHistory,
+            // chatMessageHistory,
             loading,
             cartridgesData,
             suppliesData,
