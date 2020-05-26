@@ -156,7 +156,9 @@ class Home extends Component {
                         handleDelete={this.orderApi.delete}
                     />
                 </Grid>
-                {/* <Grid>
+
+                {/* FIXME: Chat area overlaps the clickability of objects underneath it
+                <Grid>
                     <Chat data={chatMessageHistory} />
                 </Grid> */}
             </Grid>
