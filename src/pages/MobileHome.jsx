@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {withSnackbar} from "notistack";
-import {Grid} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -8,6 +7,7 @@ import axios from "axios";
 import {getApiUrl} from "../api/urls";
 import Button from "@material-ui/core/Button";
 import {CommonApi} from "../api/CommonApi";
+import Paper from "@material-ui/core/Paper";
 
 class MobileHome extends Component {
     state = {
@@ -96,54 +96,46 @@ class MobileHome extends Component {
 
     render() {
         return (
-            <Grid container
-                  direction="column"
-                  justify="flex-start"
-                  alignItems="flex-start"
-                  spacing={3}>
-                <Grid item>
-                    <TextField
-                        style={{width: 230}}
-                        id="outlined-select-currency"
-                        select
-                        label="Картридж"
-                        value={this.state.cartIndex}
-                        onChange={this.handleChange}
-                        helperText={`Осталось картриджей ${this.state.countData}`}
-                        variant="outlined"
-                    >
-                        {this.state.cartridgesData.map((option, index) => (
-                            <MenuItem key={option.name} value={index}>
-                                {option.name}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                </Grid>
-                <Grid item>
-                    <TextField
-                        style={{width: 230}}
-                        id="outlined-number"
-                        label="Количество"
-                        type="number"
-                        InputLabelProps={{shrink: true}}
-                        variant="outlined"
-                        onChange={this.handleChangeCount}
-                    />
-                </Grid>
-                <Grid item>
-                    <TextField style={{width: 230}} id="outlined-basic" label="Комментарий" variant="outlined"
-                               onChange={this.handleChangeCommit}/>
-                </Grid>
-                <Grid item>
-                    <Button variant="contained" color="secondary" onClick={() => this.createSupplyOut()}>Выдать</Button>
-                    <Link style={{paddingLeft: 10}} to={{
-                        pathname: "/",
-                        backLink: false
-                    }}>
-                        <Button variant="contained" color="primary">На главную</Button>
-                    </Link>
-                </Grid>
-            </Grid>
+            <Paper elevation={5} style={{maxWidth: 300}}>
+                <TextField
+                    style={{width: 230, padding: 10, marginLeft: 20, marginTop: 20}}
+                    id="outlined-select-currency"
+                    select
+                    label="Картридж"
+                    value={this.state.cartIndex}
+                    onChange={this.handleChange}
+                    helperText={`Осталось картриджей ${this.state.countData}`}
+                    variant="outlined"
+                >
+                    {this.state.cartridgesData.map((option, index) => (
+                        <MenuItem key={option.name} value={index}>
+                            {option.name}
+                        </MenuItem>
+                    ))}
+                </TextField>
+                <br/>
+                <TextField
+                    style={{width: 230, padding: 10, marginLeft: 20,}}
+                    id="outlined-number"
+                    label="Количество"
+                    type="number"
+                    InputLabelProps={{shrink: true}}
+                    variant="outlined"
+                    onChange={this.handleChangeCount}
+                />
+                <br/>
+                <TextField style={{width: 230, padding: 10, marginLeft: 20}} id="outlined-basic" label="Комментарий" variant="outlined"
+                           onChange={this.handleChangeCommit}/>
+                <br/>
+                <Button variant="contained" color="secondary" style={{ padding: 10, marginLeft: 30}}
+                        onClick={() => this.createSupplyOut()}>Выдать</Button>
+                <Link style={{paddingLeft: 10, marginLeft: 10}} to={{
+                    pathname: "/",
+                    backLink: false
+                }}>
+                    <Button style={{padding: 10, margin: 20}} variant="contained" color="primary">На главную</Button>
+                </Link>
+            </Paper>
         )
     }
 }
