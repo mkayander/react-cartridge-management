@@ -17,6 +17,7 @@ class MobileHome extends Component {
         cart: "",
         countNow: "  ",
         countSupply: 0,
+        commit: "",
     };
 
     api = axios.create({
@@ -49,6 +50,10 @@ class MobileHome extends Component {
         return this.setState({countSupply: event.target.value})
     };
 
+    handleChangeCommit = (event) => {
+        return this.setState({commit: event.target.value})
+    };
+
     displayActions = {
         success: async (msg) => {
             this.props.enqueueSnackbar(msg, {variant: "success", persist: true});
@@ -69,7 +74,7 @@ class MobileHome extends Component {
                 success: "Перемещение создано успешно!",
                 error: "Не удалось создать перемещение!",
             }
-        },{
+        }, {
             refreshAll: () => (null),
             // setState: (value) => this.setState({ suppliesData: value }),
             setLoading: (bool) => this.setState({loading: bool}),
@@ -84,6 +89,7 @@ class MobileHome extends Component {
                 out: true,
                 count: this.state.countSupply,
                 cartridge: this.state.cart,
+                comment: this.state.commit,
             }
         )
     );
@@ -123,6 +129,10 @@ class MobileHome extends Component {
                         variant="outlined"
                         onChange={this.handleChangeCount}
                     />
+                </Grid>
+                <Grid item>
+                    <TextField style={{width: 230}} id="outlined-basic" label="Комментарий" variant="outlined"
+                               onChange={this.handleChangeCommit}/>
                 </Grid>
                 <Grid item>
                     <Button variant="contained" color="secondary" onClick={() => this.createSupplyOut()}>Выдать</Button>
