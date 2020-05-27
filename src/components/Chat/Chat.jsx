@@ -13,7 +13,6 @@ import { Button } from "@material-ui/core";
 import { getCookie } from "../../utils/getCookie";
 import { getWsChatUrl } from "../../api/urls";
 
-import styles from "./Chat.module.css";
 import CustomMessage from "./CustomMessage";
 
 export class Chat extends Component {
