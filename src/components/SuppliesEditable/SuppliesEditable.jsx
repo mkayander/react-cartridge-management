@@ -88,6 +88,7 @@ function SuppliesEditable(props) {
             ]}
             data={data}
             options={{
+                pageSize: 10,
                 exportButton: true,
                 actionsColumnIndex: -1,
                 // emptyRowsWhenPaging: true,
