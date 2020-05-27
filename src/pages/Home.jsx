@@ -8,7 +8,7 @@ import {
     CartridesTable,
     SuppliesEditable,
     OrdersTable,
-    // Chat,
+    Chat,
 } from "../components";
 import { CommonApi } from "../api/CommonApi";
 import fetchAll from "../api";
@@ -122,7 +122,7 @@ class Home extends Component {
 
     render() {
         const {
-            // chatMessageHistory,
+            chatMessageHistory,
             loading,
             cartridgesData,
             suppliesData,
@@ -162,10 +162,10 @@ class Home extends Component {
                         />
                     </Grid>
 
-                    {/* FIXME: Chat area overlaps the clickability of objects underneath it
-                <Grid>
-                    <Chat data={chatMessageHistory} />
-                </Grid> */}
+                    {/* FIXME: Chat area overlaps the clickability of objects underneath it */}
+                    <Grid>
+                        <Chat data={chatMessageHistory} />
+                    </Grid>
                 </Grid>
             );
         }

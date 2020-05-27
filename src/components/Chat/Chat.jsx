@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withSnackbar } from "notistack";
-import Divider from '@material-ui/core/Divider';
+import Divider from "@material-ui/core/Divider";
 
 import {
     Widget,
@@ -45,8 +45,8 @@ export class Chat extends Component {
         );
     };
 
-    divider = () =>{
-        return <hr className={styles["rcw-divider"]} />
+    divider = () => {
+        return <hr className={styles["rcw-divider"]} />;
     };
 
     chatHistoryLoad() {
@@ -57,7 +57,7 @@ export class Chat extends Component {
                 client: element.user === this.state.user,
             });
         });
-        renderCustomComponent(Divider, {orientation: 'horizontal'});
+        renderCustomComponent(Divider, { orientation: "horizontal" });
         markAllAsRead();
     }
 
@@ -136,14 +136,12 @@ export class Chat extends Component {
     render() {
         if (this.state.ws !== null) {
             return (
-                <div className={styles["rcw-widget-container"]}>
-                    <Widget
-                        theme={styles}
-                        handleNewUserMessage={this.handleNewUserMessage}
-                        title="Чат"
-                        subtitle={"User id " + this.state.user}
-                    />
-                </div>
+                <Widget
+                    theme={styles}
+                    handleNewUserMessage={this.handleNewUserMessage}
+                    title="Чат"
+                    subtitle={"User id " + this.state.user}
+                />
             );
         }
         return null;
