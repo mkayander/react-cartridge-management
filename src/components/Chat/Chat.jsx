@@ -1,6 +1,7 @@
-import React, { Component } from "react";
-import { withSnackbar } from "notistack";
+import React, {Component} from "react";
+import {withSnackbar} from "notistack";
 import Divider from '@material-ui/core/Divider';
+import classNames from "classnames";
 
 import {
     Widget,
@@ -9,9 +10,9 @@ import {
     renderCustomComponent,
 } from "react-chat-widget";
 import "react-chat-widget/lib/styles.css";
-import { Button } from "@material-ui/core";
-import { getCookie } from "../../utils/getCookie";
-import { getWsChatUrl } from "../../api/urls";
+import {Button} from "@material-ui/core";
+import {getCookie} from "../../utils/getCookie";
+import {getWsChatUrl} from "../../api/urls";
 
 import styles from "./Chat.module.css";
 import CustomMessage from "./CustomMessage";
@@ -45,8 +46,8 @@ export class Chat extends Component {
         );
     };
 
-    divider = () =>{
-        return <hr className={styles["rcw-divider"]} />
+    divider = () => {
+        return <hr className={styles["rcw-divider"]}/>
     };
 
     chatHistoryLoad() {
@@ -122,7 +123,7 @@ export class Chat extends Component {
                 },
             });
 
-            this.setState({ ws: null, user: "не подключен" });
+            this.setState({ws: null, user: "не подключен"});
         };
 
         // websocket onerror event listener
@@ -136,14 +137,12 @@ export class Chat extends Component {
     render() {
         if (this.state.ws !== null) {
             return (
-                <div className={styles["rcw-widget-container"]}>
-                    <Widget
-                        theme={styles}
-                        handleNewUserMessage={this.handleNewUserMessage}
-                        title="Чат"
-                        subtitle={"User id " + this.state.user}
-                    />
-                </div>
+                <Widget
+                    theme={styles}
+                    handleNewUserMessage={this.handleNewUserMessage}
+                    title="Чат"
+                    subtitle={"User id " + this.state.user}
+                />
             );
         }
         return null;
