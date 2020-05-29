@@ -17,6 +17,8 @@
     "react-chat-widget": "^3.0.2",
     "react-device-detect": "^1.12.1",
     "react-dom": "^16.13.1",
+    "react-native-hr": "^1.1.4",
+    "react-native-hr-component": "^2.0.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-window": "^1.8.5",

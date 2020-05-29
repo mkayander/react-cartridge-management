@@ -203,6 +203,7 @@ class CustomChat extends Component {
 
                     <div className="rcw-customchat-list">
                         {this.state.messageResponse.map((el) => el)}
+                        <hr className="hr-text" data-content="New message"/>
                         {this.state.newMessageList.map((el, index) => this.generate(el.message, index, el.time.toLocaleString(), el.user === this.state.user))}
                         <div ref={this.messagesEndRef}/>
                     </div>
