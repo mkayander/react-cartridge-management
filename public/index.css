@@ -1,4 +1,5 @@
 .rcw-widget-container {
+<<<<<<< HEAD
     /* bottom: 0;
     display: flex;
     flex-direction: column;
@@ -29,4 +30,22 @@
 .rcw-message > .rcw-response {
     background-color: black;
     color: white;
+=======
+    z-index: 15 !important;
 }
+
+.rcw-launcher{
+    right: 20px !important;
+>>>>>>> 99026635ee8542b05cb0fb85e9903d5ce98b1764
+}
+
+.rcw-conversation-container.hidden {
+    display: none !important;
+}
+
+.rcw-conversation-container.active {
+    display: block !important;
+    transition: opacity .3s ease !important;
+}
+
+
