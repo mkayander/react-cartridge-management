@@ -8,13 +8,13 @@ import {
     CartridesTable,
     SuppliesEditable,
     OrdersTable,
+    Chat,
 } from "../components";
 import {CommonApi} from "../api/CommonApi";
 import fetchAll from "../api";
 
 import {isMobile} from "react-device-detect";
 import {Redirect} from "react-router-dom";
-import CustomChat from "../components/Chat/CustomChat";
 
 class Home extends Component {
     state = {
@@ -161,7 +161,7 @@ class Home extends Component {
                             handleDelete={this.orderApi.delete}
                         />
                     </Grid>
-                    <CustomChat data={chatMessageHistory} />
+                    <Chat data={chatMessageHistory} />
                 </Grid>
             );
         }
