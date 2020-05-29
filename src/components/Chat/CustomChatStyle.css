@@ -144,6 +144,14 @@
     z-index: 15;
 }
 
+.rcw-customchat-launcher.none{
+    display: none !important;
+}
+
+.rcw-customchat-launcher.block{
+    display: block !important;
+}
+
 .rcw-customchat-launcher-icon {
     color: white;
 }

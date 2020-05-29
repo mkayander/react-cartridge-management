@@ -218,7 +218,7 @@ class CustomChat extends Component {
                 </Paper>
                 <IconButton
                     onClick={this.handleLaunchBtn}
-                    classes={{root: "rcw-customchat-launcher"}}
+                    classes={{root: `rcw-customchat-launcher ${this.state.ws === null ? "none" : "block"}`}}
                     color="primary"
                 >
                     {this.closeBtnGenerate()}
