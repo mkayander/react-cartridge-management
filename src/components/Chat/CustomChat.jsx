@@ -10,6 +10,7 @@ import SendIcon from '@material-ui/icons/Send';
 import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
 import IconButton from "@material-ui/core/IconButton";
 import './CustomChatStyle.css'
+import Badge from "@material-ui/core/Badge";
 
 class CustomChat extends Component {
     state = {
@@ -17,10 +18,10 @@ class CustomChat extends Component {
         btnLaunchClick: true,
         user: null,
         ws: null,
-        connectState: null,
         messageResponse: [],
         newMessageList: [],
         msgInput: "",
+        msgBadge: 0,
     };
 
     messagesEndRef = React.createRef();
@@ -75,8 +76,10 @@ class CustomChat extends Component {
             this.chatHistoryLoad();
             data.time = new Date();
 
-            this.setState(prevState => ({newMessageList: [...prevState.newMessageList, data]}))
-
+            this.setState(prevState => ({newMessageList: [...prevState.newMessageList, data]}));
+            if (this.state.btnLaunchClick) {
+                this.setState(prevState => ({msgBadge: prevState.msgBadge + 1}))
+            }
         };
 
         // websocket onopen event listener
@@ -123,7 +126,6 @@ class CustomChat extends Component {
                     horizontal: "right",
                 },
             });
-
             this.setState({ws: null, user: "не подключен"});
         };
 
@@ -162,6 +164,7 @@ class CustomChat extends Component {
             this.setState({btnLaunchClick: false});
             this.setState({chatHiddenOrActive: "active"});
             this.nameInput.focus();
+            this.setState({msgBadge: 0})
         } else {
             this.setState({chatHiddenOrActive: "hidden"});
             this.setState({btnLaunchClick: true});
@@ -209,7 +212,9 @@ class CustomChat extends Component {
                                value={this.state.msgInput}
                                placeholder="Type a message..." className="rcw-customchat-input"
                                onKeyPress={this.handlePressKey}
-                               ref={(input) => { this.nameInput = input; }}
+                               ref={(input) => {
+                                   this.nameInput = input;
+                               }}
                         />
 
                         <Button classes={{root: "rcw-customchat-sender"}}
@@ -224,7 +229,10 @@ class CustomChat extends Component {
                     classes={{root: `rcw-customchat-launcher ${this.state.ws === null ? "none" : "block"}`}}
                     color="primary"
                 >
-                    {this.closeBtnGenerate()}
+                    <Badge badgeContent={this.state.msgBadge} max={100} color="error"
+                           classes={{root: "rcw-customchat-badge"}}>
+                        {this.closeBtnGenerate()}
+                    </Badge>
                 </IconButton>
             </React.Fragment>
         )

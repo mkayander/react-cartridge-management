@@ -1,19 +1,28 @@
-/*.rcw-customchat-button-div {*/
-/*    position: fixed;*/
-/*    right: 0;*/
-/*    bottom: 0;*/
-/*    z-index: 15;*/
-/*}*/
-
 .rcw-customchat-main-div {
     position: fixed !important;
     min-width: 380px;
-    max-height: 600px;
-    min-height: 600px;
+    height: 600px;
     right: 20px;
     bottom: 90px;
     z-index: 1;
     border-radius: 10px 10px 10px 10px !important;
+}
+
+@media only screen and (min-width: 0px) and (max-width: 500px) and (min-height: 500px){
+    .rcw-customchat-main-div {
+        min-width: 90%;
+    }
+}
+
+@media only screen and (min-height: 0px) and (max-width: 500px) and (max-height: 500px) {
+    .rcw-customchat-main-div {
+        min-width: 90%;
+        bottom: 0;
+    }
+
+    .rcw-customchat-launcher {
+        display: none !important;
+    }
 }
 
 .rcw-customchat-main-div.hidden {
@@ -21,7 +30,6 @@
     z-index: -1;
     transform: translateX(50px);
     transition: opacity 0.3s ease, z-index 0.3s ease, transform 0.3s ease;
-    /*transition: z-index 0.3s ease, transform 0.3s ease;*/
 }
 
 .rcw-customchat-main-div.active {
@@ -37,7 +45,7 @@
 
 .rcw-customchat-list {
     background-color: #fff;
-    max-height: 410px;
+    max-height: 420px;
     overflow-y: auto;
     padding-top: 10px;
 }
@@ -126,10 +134,14 @@
     margin-top: 5px;
 }
 
+.rcw-customchat-client .rcw-customchat-timestamp{
+    text-align: end;
+}
+
 .rcw-customchat-launcher {
     position: fixed !important;
     right: 20px;
-    bottom: 20px;
+    bottom: 15px;
     animation-duration: .5s;
     animation-name: d;
     animation-fill-mode: forwards;
@@ -144,14 +156,24 @@
     z-index: 15;
 }
 
-.rcw-customchat-launcher.none{
-    display: none !important;
+.rcw-customchat-launcher.none {
+    display: none;
 }
 
-.rcw-customchat-launcher.block{
-    display: block !important;
+.rcw-customchat-launcher.block {
+    display: block;
 }
 
 .rcw-customchat-launcher-icon {
     color: white;
+}
+
+.rcw-customchat-badge span {
+    top:-5px;
+    right: -5px;
+    color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 20px;
+    font-size: large;
 }
