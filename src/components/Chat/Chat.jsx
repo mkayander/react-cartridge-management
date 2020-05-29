@@ -13,7 +13,6 @@ import { Button } from "@material-ui/core";
 import { getCookie } from "../../utils/getCookie";
 import { getWsChatUrl } from "../../api/urls";
 
-import styles from "./Chat.module.css";
 import CustomMessage from "./CustomMessage";
 
 export class Chat extends Component {
@@ -45,10 +44,6 @@ export class Chat extends Component {
         );
     };
 
-    divider = () => {
-        return <hr className={styles["rcw-divider"]} />;
-    };
-
     chatHistoryLoad() {
         this.props.data.forEach((element) => {
             // addResponseMessage(element.message);
@@ -57,7 +52,6 @@ export class Chat extends Component {
                 client: element.user === this.state.user,
             });
         });
-        renderCustomComponent(Divider, { orientation: "horizontal" });
         markAllAsRead();
     }
 
@@ -137,7 +131,6 @@ export class Chat extends Component {
         if (this.state.ws !== null) {
             return (
                 <Widget
-                    theme={styles}
                     handleNewUserMessage={this.handleNewUserMessage}
                     title="Чат"
                     subtitle={"User id " + this.state.user}

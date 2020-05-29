@@ -1,8 +1,18 @@
-.rcw-conversation-container > .rcw-header {
-    background-color: red !important;
+.rcw-widget-container {
+    z-index: 15 !important;
 }
 
-.rcw-message > .rcw-response {
-    background-color: black;
-    color: white;
+.rcw-launcher{
+    right: 20px !important;
 }
+
+.rcw-conversation-container.hidden {
+    display: none !important;
+}
+
+.rcw-conversation-container.active {
+    display: block !important;
+    transition: opacity .3s ease !important;
+}
+
+
