@@ -8,15 +8,13 @@ import {
     CartridesTable,
     SuppliesEditable,
     OrdersTable,
-    Chat,
 } from "../components";
 import {CommonApi} from "../api/CommonApi";
 import fetchAll from "../api";
 
 import {isMobile} from "react-device-detect";
-import {Link, Redirect} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 import CustomChat from "../components/Chat/CustomChat";
-import Button from "@material-ui/core/Button";
 
 class Home extends Component {
     state = {
@@ -163,9 +161,6 @@ class Home extends Component {
                             handleDelete={this.orderApi.delete}
                         />
                     </Grid>
-
-                    {/* FIXME: Chat area overlaps the clickability of objects underneath it */}
-
                     <CustomChat data={chatMessageHistory} />
                 </Grid>
             );

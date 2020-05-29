@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { withSnackbar } from "notistack";
-import Divider from "@material-ui/core/Divider";
 
 import {
     Widget,

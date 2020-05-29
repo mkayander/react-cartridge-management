@@ -24,6 +24,7 @@ class CustomChat extends Component {
     };
 
     messagesEndRef = React.createRef();
+    nameInput = React.createRef();
     messageList = [];
     newMessageList = [];
 
@@ -160,6 +161,7 @@ class CustomChat extends Component {
         if (this.state.btnLaunchClick) {
             this.setState({btnLaunchClick: false});
             this.setState({chatHiddenOrActive: "active"});
+            this.nameInput.focus();
         } else {
             this.setState({chatHiddenOrActive: "hidden"});
             this.setState({btnLaunchClick: true});
@@ -205,8 +207,9 @@ class CustomChat extends Component {
                     <div className="rcw-customchat-input-div">
                         <input onChange={this.handleMsgInput}
                                value={this.state.msgInput}
-                               placeholder="Type a massage..." className="rcw-customchat-input"
+                               placeholder="Type a message..." className="rcw-customchat-input"
                                onKeyPress={this.handlePressKey}
+                               ref={(input) => { this.nameInput = input; }}
                         />
 
                         <Button classes={{root: "rcw-customchat-sender"}}
