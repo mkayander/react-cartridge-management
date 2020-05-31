@@ -5,8 +5,9 @@ import { Paper } from "@material-ui/core";
 // import { DoneAll, CheckCircle, LocalShipping } from "@material-ui/icons";
 
 import MaterialTable from "material-table";
-import FinishedStatus from "./FinishedStatus";
-import InWorkStatus from "./InWorkStatus";
+import FinishedStatus from "./icons/FinishedStatus";
+import InWorkStatus from "./icons/InWorkStatus";
+import PendingStatus from "./icons/PendingStatus";
 import matTablelocalization from "../../utils/localizations";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,19 +45,24 @@ function OrdersTable({
                 {
                     title: "Статус",
                     field: "status",
-                    // editable: "onUpdate",
-                    initialEditValue: "false",
+                    editable: "onUpdate",
+                    // editable: "never",
+                    initialEditValue: "pending",
                     lookup: {
                         finished: "Завершён",
                         work: "В работе",
                         pending: "Обработка заказа",
                     },
-                    render: (rowData) =>
-                        rowData.finished ? (
-                            <FinishedStatus />
-                        ) : (
-                            <InWorkStatus />
-                        ),
+                    render: (rowData) => {
+                        switch (rowData.status) {
+                            case "finished":
+                                return <FinishedStatus />;
+                            case "work":
+                                return <InWorkStatus />;
+                            default:
+                                return <PendingStatus />;
+                        }
+                    },
                 },
                 {
                     title: "Дата создания",
@@ -105,16 +111,17 @@ function OrdersTable({
             actions={[
                 (rowData) => ({
                     icon: "check",
-                    tooltip: rowData.finished ? undefined : "Завершить заказ",
-                    disabled: rowData.finished,
+                    tooltip:
+                        rowData.status !== "work"
+                            ? undefined
+                            : "Завершить заказ",
+                    disabled: rowData.status !== "work",
                     onClick: (event, rowData) => {
                         console.log(event, rowData);
                         if (!rowData.finished) {
-                            alert(`Заказ ${rowData.number} выполнен`);
-                        } else {
-                            alert(
-                                `Заказ ${rowData.number} уже является выполненным`
-                            );
+                            rowData.finished = true;
+                            rowData.status = "finished";
+                            handleUpdate(rowData);
                         }
                     },
                 }),
@@ -128,6 +135,8 @@ function OrdersTable({
                     }),
                 onRowUpdate: (newData) =>
                     new Promise((resolve) => {
+                        newData.finished =
+                            newData.status === "finished" ? true : false;
                         handleUpdate(newData);
                         // enqueueSnackbar("Заказ обновлён");
                         resolve();
