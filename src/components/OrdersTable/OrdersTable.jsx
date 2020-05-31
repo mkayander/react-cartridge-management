@@ -43,6 +43,13 @@ function OrdersTable({
             localization={matTablelocalization}
             columns={[
                 {
+                    title: "#",
+                    field: "id",
+                    editable: "never",
+                    hidden: true,
+                    searchable: true,
+                },
+                {
                     title: "Статус",
                     field: "status",
                     editable: "onUpdate",
@@ -69,6 +76,7 @@ function OrdersTable({
                     field: "date",
                     type: "datetime",
                     editable: "never",
+                    searchable: false,
                 },
                 {
                     title: "Дата завершения",
@@ -76,6 +84,7 @@ function OrdersTable({
                     type: "datetime",
                     editable: "never",
                     emptyValue: "—",
+                    searchable: false,
                 },
                 {
                     title: "Номер",
