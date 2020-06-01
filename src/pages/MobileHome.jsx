@@ -8,6 +8,7 @@ import {getApiUrl} from "../api/urls";
 import Button from "@material-ui/core/Button";
 import {CommonApi} from "../api/CommonApi";
 import Paper from "@material-ui/core/Paper";
+import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 
 class MobileHome extends Component {
     state = {
@@ -124,16 +125,27 @@ class MobileHome extends Component {
                     onChange={this.handleChangeCount}
                 />
                 <br/>
-                <TextField style={{width: 230, padding: 10, marginLeft: 20}} id="outlined-basic" label="Комментарий" variant="outlined"
+                <TextField style={{width: 230, padding: 10, marginLeft: 20}} id="outlined-basic" label="Комментарий"
+                           variant="outlined"
                            onChange={this.handleChangeCommit}/>
                 <br/>
-                <Button variant="contained" color="secondary" style={{ padding: 10, marginLeft: 30}}
-                        onClick={() => this.createSupplyOut()}>Выдать</Button>
-                <Link style={{paddingLeft: 10, marginLeft: 10}} to={{
+                <Button variant="contained" color="secondary" style={{
+                    width: 100,
+                    height: 40,
+                    marginLeft: 30,
+                    marginBottom: 20,
+                    marginTop: 10,
+                    color: "white"
+                }}
+                        onClick={() => this.createSupplyOut()}><span>ВЫДАТЬ</span></Button>
+                <Link style={{marginLeft: 30}} to={{
                     pathname: "/",
                     backLink: false
                 }}>
-                    <Button style={{padding: 10, margin: 20}} variant="contained" color="primary">На главную</Button>
+                    <Button style={{width: 100, height: 40, marginBottom: 20, marginTop: 10}} variant="contained"
+                            color="primary">
+                        <HomeRoundedIcon/>
+                    </Button>
                 </Link>
             </Paper>
         )
