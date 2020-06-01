@@ -17,13 +17,6 @@ export class CommonApi {
     create = async (instance) => {
         this.callbacks.setLoading(true);
         api.post(this.path, instance)
-            .catch((reason) => {
-                this.callbacks.error(
-                    this.messages.create.error + " \n " + reason
-                );
-                console.log("CommonApi.create.catch", reason.body);
-                throw reason;
-            })
             .then(
                 () => {
                     this.callbacks.refreshAll();
@@ -32,20 +25,27 @@ export class CommonApi {
                 (reason) =>
                     console.log("CommonApi.create.then.onrejected:", reason)
             )
+            .catch((reason) => {
+                this.callbacks.error(
+                    this.messages.create.error + " \n " + reason
+                );
+                console.log("CommonApi.create.catch", reason.body);
+                // throw reason;
+            })
             .finally(() => this.callbacks.setLoading(false));
     };
 
     update = async (instance) => {
         this.callbacks.setLoading(true);
         api.put(`${this.path}${instance.id}/`, instance)
+            .then(() => {
+                this.callbacks.refreshAll();
+                this.callbacks.success(this.messages.update.success);
+            })
             .catch((reason) => {
                 this.callbacks.error(
                     this.messages.update.error + " \n " + reason
                 );
-            })
-            .then(() => {
-                this.callbacks.refreshAll();
-                this.callbacks.success(this.messages.update.success);
             })
             .finally(() => this.callbacks.setLoading(false));
     };
@@ -53,14 +53,14 @@ export class CommonApi {
     delete = async (instance) => {
         this.callbacks.setLoading(true);
         api.delete(`${this.path}${instance.id}/`)
+            .then(() => {
+                this.callbacks.refreshAll();
+                this.callbacks.success(this.messages.delete.success);
+            })
             .catch((reason) => {
                 this.callbacks.error(
                     this.messages.delete.error + " \n " + reason
                 );
-            })
-            .then(() => {
-                this.callbacks.refreshAll();
-                this.callbacks.success(this.messages.delete.success);
             })
             .finally(() => this.callbacks.setLoading(false));
     };
