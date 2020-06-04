@@ -43,6 +43,11 @@ export class CommonApi {
                 this.callbacks.success(this.messages.update.success);
             })
             .catch((reason) => {
+                console.log(
+                    "update.catch: ",
+                    reason,
+                    reason.response ? reason.response.data : null
+                );
                 this.callbacks.error(
                     this.messages.update.error + " \n " + reason
                 );

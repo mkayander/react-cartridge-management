@@ -15,6 +15,7 @@ import fetchAll from "../api";
 
 import { isMobile } from "react-device-detect";
 import { Redirect } from "react-router-dom";
+import { listCookies } from "../utils/listCookies";
 
 class Home extends Component {
     state = {
@@ -119,6 +120,7 @@ class Home extends Component {
 
     async componentDidMount() {
         await this.handleRefresh();
+        console.log("Cookies: ", listCookies());
     }
 
     render() {
