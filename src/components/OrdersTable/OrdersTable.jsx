@@ -126,7 +126,6 @@ function OrdersTable({
                             : "Завершить заказ",
                     disabled: rowData.status !== "work",
                     onClick: (event, rowData) => {
-                        console.log(event, rowData);
                         if (!rowData.finished) {
                             rowData.finished = true;
                             rowData.status = "finished";

@@ -1,4 +1,6 @@
-import { api } from "./api";
+// import { api } from "./api";
+
+import api from "./api";
 
 export class CommonApi {
     constructor(path, messages, callbacks) {
@@ -21,16 +23,13 @@ export class CommonApi {
                 () => {
                     this.callbacks.refreshAll();
                     this.callbacks.success(this.messages.create.success);
-                },
-                (reason) =>
-                    console.log("CommonApi.create.then.onrejected:", reason)
+                }
             )
             .catch((reason) => {
                 this.callbacks.error(
                     this.messages.create.error + " \n " + reason
                 );
-                console.log("CommonApi.create.catch", reason.body);
-                // throw reason;
+                // console.log("CommonApi.create.catch", reason.body);
             })
             .finally(() => this.callbacks.setLoading(false));
     };
@@ -43,11 +42,6 @@ export class CommonApi {
                 this.callbacks.success(this.messages.update.success);
             })
             .catch((reason) => {
-                console.log(
-                    "update.catch: ",
-                    reason,
-                    reason.response ? reason.response.data : null
-                );
                 this.callbacks.error(
                     this.messages.update.error + " \n " + reason
                 );

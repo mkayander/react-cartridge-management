@@ -41,7 +41,6 @@ class Home extends Component {
 
     handleRefresh = async () => {
         this.setState({ loading: true });
-        console.log("handleRefresh");
         fetchAll()
             .then((response) => {
                 if (response) {
@@ -60,7 +59,6 @@ class Home extends Component {
                 }
             })
             .catch((error) => {
-                console.log(error.response);
                 this.displayActions.error(error);
                 // throw error;
             })
@@ -120,7 +118,11 @@ class Home extends Component {
 
     async componentDidMount() {
         await this.handleRefresh();
-        console.log("Cookies: ", listCookies());
+        console.table(listCookies());
+    }
+
+    componentDidUpdate() {
+        console.table(listCookies());
     }
 
     render() {
