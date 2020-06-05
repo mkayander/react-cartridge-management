@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { isEmpty } from "lodash";
 
 import { Paper } from "@material-ui/core";
 // import { DoneAll, CheckCircle, LocalShipping } from "@material-ui/icons";
@@ -9,6 +10,8 @@ import FinishedStatus from "./icons/FinishedStatus";
 import InWorkStatus from "./icons/InWorkStatus";
 import PendingStatus from "./icons/PendingStatus";
 import matTablelocalization from "../../utils/localizations";
+
+import OrderDialog from "./OrderDialog";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,7 +31,8 @@ function OrdersTable({
 }) {
     const classes = useStyles();
 
-    // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const [open, setOpen] = React.useState(false);
+    const [dialog, setDialog] = React.useState({});
 
     let cartridgesChoices = {};
     cartridges.forEach(
@@ -37,126 +41,134 @@ function OrdersTable({
     );
 
     return (
-        <MaterialTable
-            isLoading={isLoading}
-            title="Заказы"
-            localization={matTablelocalization}
-            columns={[
-                {
-                    title: "#",
-                    field: "id",
-                    editable: "never",
-                    hidden: true,
-                    searchable: true,
-                },
-                {
-                    title: "Статус",
-                    field: "status",
-                    editable: "onUpdate",
-                    // editable: "never",
-                    initialEditValue: "pending",
-                    lookup: {
-                        finished: "Завершён",
-                        work: "В работе",
-                        pending: "Обработка заказа",
+        <div>
+            <OrderDialog
+                open={!isEmpty(dialog)}
+                handleClose={() => setDialog({})}
+                order={dialog}
+            />
+            <MaterialTable
+                isLoading={isLoading}
+                title="Заказы"
+                localization={matTablelocalization}
+                columns={[
+                    {
+                        title: "#",
+                        field: "id",
+                        editable: "never",
+                        hidden: true,
+                        searchable: true,
                     },
-                    render: (rowData) => {
-                        switch (rowData.status) {
-                            case "finished":
-                                return <FinishedStatus />;
-                            case "work":
-                                return <InWorkStatus />;
-                            default:
-                                return <PendingStatus />;
-                        }
+                    {
+                        title: "Статус",
+                        field: "status",
+                        editable: "onUpdate",
+                        // editable: "never",
+                        initialEditValue: "pending",
+                        lookup: {
+                            finished: "Завершён",
+                            work: "В работе",
+                            pending: "Обработка заказа",
+                        },
+                        render: (rowData) => {
+                            switch (rowData.status) {
+                                case "finished":
+                                    return <FinishedStatus />;
+                                case "work":
+                                    return <InWorkStatus />;
+                                default:
+                                    return <PendingStatus />;
+                            }
+                        },
                     },
-                },
-                {
-                    title: "Дата создания",
-                    field: "date",
-                    type: "datetime",
-                    editable: "never",
-                    searchable: false,
-                },
-                {
-                    title: "Дата завершения",
-                    field: "date_finished",
-                    type: "datetime",
-                    editable: "never",
-                    emptyValue: "—",
-                    searchable: false,
-                },
-                {
-                    title: "Номер",
-                    field: "number",
-                    type: "numeric",
-                    emptyValue: "Не определён",
-                },
-                {
-                    title: "Картридж",
-                    field: "cartridge",
-                    lookup: cartridgesChoices,
-                },
-                {
-                    title: "Количество",
-                    field: "count",
-                    type: "numeric",
-                },
-            ]}
-            data={data}
-            components={{
-                Container: (props) => (
-                    <Paper
-                        {...props}
-                        elevation={useTheme().tables.elevation}
-                        className={classes.root}
-                    />
-                ),
-            }}
-            options={{
-                exportButton: true,
-                actionsColumnIndex: -1,
-            }}
-            actions={[
-                (rowData) => ({
-                    icon: "check",
-                    tooltip:
-                        rowData.status !== "work"
-                            ? undefined
-                            : "Завершить заказ",
-                    disabled: rowData.status !== "work",
-                    onClick: (event, rowData) => {
-                        if (!rowData.finished) {
-                            rowData.finished = true;
-                            rowData.status = "finished";
-                            handleUpdate(rowData);
-                        }
+                    {
+                        title: "Дата создания",
+                        field: "date",
+                        type: "datetime",
+                        editable: "never",
+                        searchable: false,
                     },
-                }),
-            ]}
-            editable={{
-                onRowAdd: (newData) =>
-                    new Promise((resolve) => {
-                        handleCreate(newData);
-                        // enqueueSnackbar("Заказ добавлен");
-                        resolve();
+                    {
+                        title: "Дата завершения",
+                        field: "date_finished",
+                        type: "datetime",
+                        editable: "never",
+                        emptyValue: "—",
+                        searchable: false,
+                    },
+                    {
+                        title: "Номер",
+                        field: "number",
+                        type: "numeric",
+                        emptyValue: "Не определён",
+                    },
+                    {
+                        title: "Картридж",
+                        field: "cartridge",
+                        lookup: cartridgesChoices,
+                    },
+                    {
+                        title: "Количество",
+                        field: "count",
+                        type: "numeric",
+                    },
+                ]}
+                data={data}
+                components={{
+                    Container: (props) => (
+                        <Paper
+                            {...props}
+                            elevation={useTheme().tables.elevation}
+                            className={classes.root}
+                        />
+                    ),
+                }}
+                options={{
+                    exportButton: true,
+                    actionsColumnIndex: -1,
+                }}
+                actions={[
+                    (rowData) => ({
+                        icon: "check",
+                        tooltip:
+                            rowData.status !== "work"
+                                ? undefined
+                                : "Завершить заказ",
+                        disabled: rowData.status !== "work",
+                        onClick: (event, rowData) => {
+                            if (!rowData.finished) {
+                                rowData.finished = true;
+                                rowData.status = "finished";
+                                handleUpdate(rowData);
+                            }
+                        },
                     }),
-                onRowUpdate: (newData) =>
-                    new Promise((resolve) => {
-                        newData.finished =
-                            newData.status === "finished" ? true : false;
-                        handleUpdate(newData);
-                        // enqueueSnackbar("Заказ обновлён");
-                        resolve();
-                    }),
-                onRowDelete: (oldData) =>
-                    new Promise((resolve) => {
-                        handleDelete(oldData);
-                        // enqueueSnackbar("Заказ удалён");
-                        resolve();
-                    }),
-            }}
-        />
+                ]}
+                onRowClick={(event, row) => setDialog(row)}
+                editable={{
+                    onRowAdd: (newData) =>
+                        new Promise((resolve) => {
+                            handleCreate(newData);
+                            // enqueueSnackbar("Заказ добавлен");
+                            resolve();
+                        }),
+                    onRowUpdate: (newData) =>
+                        new Promise((resolve) => {
+                            newData.finished =
+                                newData.status === "finished" ? true : false;
+                            handleUpdate(newData);
+                            // enqueueSnackbar("Заказ обновлён");
+                            resolve();
+                        }),
+                    onRowDelete: (oldData) =>
+                        new Promise((resolve) => {
+                            handleDelete(oldData);
+                            // enqueueSnackbar("Заказ удалён");
+                            resolve();
+                        }),
+                }}
+            />
+        </div>
     );
 }
 
