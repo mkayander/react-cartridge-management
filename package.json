@@ -26,16 +26,17 @@
         "react-router-dom": "^5.2.0",
         "react-scripts": "3.4.1",
         "react-window": "^1.8.5",
+        "rewire": "^5.0.0",
         "sass": "^1.26.5",
         "tinycolor2": "^1.4.1",
         "typescript": "^3.9.2",
         "webpack-bundle-tracker": "^1.0.0-alpha.1"
     },
     "scripts": {
-        "start": "react-app-rewired start",
-        "build": "react-app-rewired build",
-        "test": "react-app-rewired test",
-        "eject": "react-app-rewired eject"
+        "start": "react-scripts start",
+        "build": "npx ./scripts/build.js",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -51,6 +52,5 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
-    },
-    "config-overrides-path": "node_modules/react-app-rewire-disable-chunks"
+    }
 }

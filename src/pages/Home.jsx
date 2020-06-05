@@ -121,10 +121,6 @@ class Home extends Component {
         console.table(listCookies());
     }
 
-    componentDidUpdate() {
-        console.table(listCookies());
-    }
-
     render() {
         const {
             chatMessageHistory,
@@ -139,10 +135,6 @@ class Home extends Component {
         } else {
             return (
                 <Grid container spacing={3}>
-                    {/* <Grid key="progress" xs={12} item>
-                    <CircularProgress />
-                    <CircularProgress disableShrink />
-                </Grid> */}
                     <Grid key="cartridges" xs={12} lg={4} item>
                         <CartridesTable cartridges={cartridgesData} />
                     </Grid>

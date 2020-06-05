@@ -25,6 +25,12 @@ import CustomChat from "./components/Chat/CustomChat";
 
 export class App extends Component {
     state = {
+        auth: {
+            // authenticated: false,
+            full_name: "",
+            last_login: "",
+            username: "",
+        },
         navbarTitle: "РЦ Валищево • Картриджи",
         theme: responsiveFontSizes(
             createMuiTheme({
@@ -49,6 +55,13 @@ export class App extends Component {
         this.notistackRef.current.closeSnackbar(key);
     };
 
+    componentDidMount() {
+        // console.log("window.django: ", window.django);
+        if (window.django) {
+            this.setState({ auth: window.django.user });
+        }
+    }
+
     render() {
         const { navbarTitle, theme } = this.state;
 
@@ -64,15 +77,26 @@ export class App extends Component {
                                 <Close />
                             </IconButton>
                         )}>
-                        <NavBar title={navbarTitle} />
+                        <NavBar
+                            title={navbarTitle}
+                            username={this.state.auth.username}
+                        />
                         <Container
                             style={{ paddingTop: 5 + "%" }}
                             maxWidth="lg">
                             <Switch>
                                 <Route path="/" exact component={Home} />
                                 <Route path="/test" exact component={Test} />
-                                <Route path="/mobile" exact component={MobileHome} />
-                                <Route path="/Chat" exact component={CustomChat} />
+                                <Route
+                                    path="/mobile"
+                                    exact
+                                    component={MobileHome}
+                                />
+                                <Route
+                                    path="/Chat"
+                                    exact
+                                    component={CustomChat}
+                                />
                             </Switch>
                         </Container>
                     </SnackbarProvider>

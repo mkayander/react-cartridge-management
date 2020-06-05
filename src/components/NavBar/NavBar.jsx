@@ -17,12 +17,15 @@ const useStyles = makeStyles((theme) => ({
     title: {
         flexGrow: 1,
     },
+    username: {
+        marginRight: 15,
+    },
     // button: {
     //     marginRight: theme.spacing(2),
     // },
 }));
 
-function NavBar({ title }) {
+function NavBar({ title, username }) {
     const classes = useStyles();
 
     const history = useHistory();
@@ -33,10 +36,18 @@ function NavBar({ title }) {
                 <Toolbar variant="regular">
                     <Typography
                         className={classes.title}
-                        variant="h6"
+                        variant="h5"
                         color="inherit">
                         {title}
                     </Typography>
+                    {username ? (
+                        <Typography
+                            className={classes.username}
+                            variant="h6"
+                            color="inherit">
+                            {username}
+                        </Typography>
+                    ) : null}
                     <Tooltip title="REST API" arrow>
                         <IconButton
                             onClick={() => {
