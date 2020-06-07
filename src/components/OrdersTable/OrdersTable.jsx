@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import { isEmpty } from "lodash";
+// import { isEmpty } from "lodash";
 
 import { Paper } from "@material-ui/core";
 // import { DoneAll, CheckCircle, LocalShipping } from "@material-ui/icons";
@@ -31,8 +31,8 @@ function OrdersTable({
 }) {
     const classes = useStyles();
 
-    const [open, setOpen] = React.useState(false);
-    const [dialog, setDialog] = React.useState({});
+    const [openDialog, setOpenDialog] = React.useState(false);
+    const [dialogData, setDialogData] = React.useState({});
 
     let cartridgesChoices = {};
     cartridges.forEach(
@@ -43,14 +43,20 @@ function OrdersTable({
     return (
         <div>
             <OrderDialog
-                open={!isEmpty(dialog)}
-                handleClose={() => setDialog({})}
-                order={dialog}
+                open={openDialog}
+                handleClose={() => {
+                    setOpenDialog(false);
+                }}
+                order={dialogData}
             />
             <MaterialTable
                 isLoading={isLoading}
                 title="Заказы"
                 localization={matTablelocalization}
+                onRowClick={(event, row) => {
+                    setDialogData(row);
+                    setOpenDialog(true);
+                }}
                 columns={[
                     {
                         title: "#",
@@ -144,7 +150,6 @@ function OrdersTable({
                         },
                     }),
                 ]}
-                onRowClick={(event, row) => setDialog(row)}
                 editable={{
                     onRowAdd: (newData) =>
                         new Promise((resolve) => {
