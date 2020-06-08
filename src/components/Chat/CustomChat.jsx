@@ -67,12 +67,12 @@ class CustomChat extends Component {
     };
 
     connect = () => {
-        var ws = new WebSocket(
+        const ws = new WebSocket(
             getWsChatUrl()
         );
 
         ws.onmessage = (e) => {
-            var data = JSON.parse(e.data);
+            let data = JSON.parse(e.data);
             this.chatHistoryLoad();
             data.time = new Date();
 
@@ -111,12 +111,12 @@ class CustomChat extends Component {
         };
 
         // websocket onclose event listener
-        ws.onclose = (e) => {
+        ws.onclose = () => {
             this.props.enqueueSnackbar("Нет подключения к чату", {
                 variant: "error",
                 persist: true,
                 preventDuplicate: true,
-                action: (key) => (
+                action: () => (
                     <Button color="inherit" onClick={() => this.connect()}>
                         Переподключится
                     </Button>

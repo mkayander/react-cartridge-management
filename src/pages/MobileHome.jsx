@@ -3,8 +3,7 @@ import {withSnackbar} from "notistack";
 import {Link} from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
-import axios from "axios";
-import {getApiUrl} from "../api/urls";
+import api from "../api/api"
 import Button from "@material-ui/core/Button";
 import {CommonApi} from "../api/CommonApi";
 import Paper from "@material-ui/core/Paper";
@@ -21,17 +20,12 @@ class MobileHome extends Component {
         commit: "",
     };
 
-    api = axios.create({
-        baseURL: getApiUrl(),
-        responseType: "json",
-    });
-
     componentDidMount() {
         this.getCartridges();
     }
 
     async getCartridges() {
-        return this.api.get("cartridges/").then((response) => {
+        return api.get("cartridges/").then((response) => {
             if (response) {
                 this.setState({
                     cartridgesData: response.data
