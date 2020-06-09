@@ -8,6 +8,10 @@ export function getEmail(emailId) {
     return api.get(`emails/${emailId}/`);
 }
 
+export function getOrdersOptions() {
+    return api.options("orders/");
+}
+
 // export const fetchCartridgesList = async () => {
 //     const cartridges = await api.get("cartridges/");
 //     // console.log("fetchCartridgesList:", cartridges);

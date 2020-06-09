@@ -10,11 +10,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
 import { getEmail } from "../../api";
 import {
-    Paper,
-    Divider,
-    Grid,
     TableContainer,
-    TableHead,
     Table,
     TableBody,
     TableRow,
@@ -84,7 +80,7 @@ export default function OrderDialog({ open, handleClose, order }) {
                 ) : null}
             </MuiDialogTitle>
             <MuiDialogContent dividers className={classes.content}>
-                <TableContainer component={<div></div>}>
+                <TableContainer>
                     <Table>
                         {/* <TableHead>
 
@@ -98,35 +94,20 @@ export default function OrderDialog({ open, handleClose, order }) {
                                     <Typography>{order.status}</Typography>
                                 </TableCell>
                             </TableRow>
+                            <TableRow>
+                                <TableCell align="left">
+                                    <Typography>Тело письма:</Typography>
+                                </TableCell>
+                                <TableCell align="left">
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: email.html,
+                                        }}></div>
+                                </TableCell>
+                            </TableRow>
                         </TableBody>
                     </Table>
                 </TableContainer>
-                {/* <Grid container spacing={1}>
-                    <Grid container item xs={12} spacing={3}>
-                        <Grid item xs={2}>
-                            <Typography>Статус заказа:</Typography>
-                        </Grid>
-                        <Grid item xs={10}>
-                            <Typography gutterBottom>{order.status}</Typography>
-                            <Divider />
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12} spacing={3}>
-                        <Grid item xs={2}>
-                            <Typography>Тело письма:</Typography>
-                        </Grid>
-                        <Grid item xs={10}>
-                            <div
-                                dangerouslySetInnerHTML={{
-                                    __html: email.html,
-                                }}></div>
-                            <Divider />
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12} spacing={3}>
-                        <Typography gutterBottom>Answer</Typography>
-                    </Grid>
-                </Grid> */}
             </MuiDialogContent>
             <MuiDialogActions className={classes.actions}>
                 <Button autoFocus onClick={handleClose} color="primary">

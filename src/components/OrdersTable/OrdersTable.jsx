@@ -12,6 +12,7 @@ import PendingStatus from "./icons/PendingStatus";
 import matTablelocalization from "../../utils/localizations";
 
 import OrderDialog from "./OrderDialog";
+import getStatusOptions from "./orderOptions";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,6 +34,14 @@ function OrdersTable({
 
     const [openDialog, setOpenDialog] = React.useState(false);
     const [dialogData, setDialogData] = React.useState({});
+    const [statusOptions, setStatusOptions] = React.useState({});
+
+    React.useEffect(() => {
+        setStatusOptions(getStatusOptions());
+        // return () => {
+        //     cleanup
+        // }
+    }, []);
 
     let cartridgesChoices = {};
     cartridges.forEach(
