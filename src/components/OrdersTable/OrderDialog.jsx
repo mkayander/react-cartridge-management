@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -8,6 +8,18 @@ import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
+import { getEmail } from "../../api";
+import {
+    Paper,
+    Divider,
+    Grid,
+    TableContainer,
+    TableHead,
+    Table,
+    TableBody,
+    TableRow,
+    TableCell,
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     // root: {
@@ -32,9 +44,24 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function CustomizedDialogs({ open, handleClose, order }) {
+export default function OrderDialog({ open, handleClose, order }) {
     const classes = useStyles();
-    console.log("CustomizedDialogs: ", order);
+    const [email, setEmail] = useState({});
+    useEffect(() => {
+        console.log("OrderDialog: useEffect: ", order.email);
+        if (order.email) {
+            getEmail(order.email)
+                .then((response) => {
+                    console.log(response);
+                    setEmail(response.data);
+                })
+                .catch((reason) => console.error(reason));
+        }
+        // return () => {
+        //     cleanup
+        // }
+    }, [order.email]);
+
     return (
         <Dialog
             // className={classes.root}
@@ -44,7 +71,9 @@ export default function CustomizedDialogs({ open, handleClose, order }) {
             aria-labelledby="customized-dialog-title"
             open={open}>
             <MuiDialogTitle disableTypography className={classes.title}>
-                <Typography variant="h6">Заказ картриджей №10293</Typography>
+                <Typography variant="h6">
+                    Заказ картриджей от {new Date(order.date).toLocaleString()}
+                </Typography>
                 {handleClose ? (
                     <IconButton
                         aria-label="close"
@@ -55,9 +84,49 @@ export default function CustomizedDialogs({ open, handleClose, order }) {
                 ) : null}
             </MuiDialogTitle>
             <MuiDialogContent dividers className={classes.content}>
-                <Typography gutterBottom>{order.status}</Typography>
-                <Typography gutterBottom>Email body</Typography>
-                <Typography gutterBottom>Answer</Typography>
+                <TableContainer component={<div></div>}>
+                    <Table>
+                        {/* <TableHead>
+
+                        </TableHead> */}
+                        <TableBody>
+                            <TableRow>
+                                <TableCell align="left">
+                                    <Typography>Статус заказа:</Typography>
+                                </TableCell>
+                                <TableCell align="left">
+                                    <Typography>{order.status}</Typography>
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                {/* <Grid container spacing={1}>
+                    <Grid container item xs={12} spacing={3}>
+                        <Grid item xs={2}>
+                            <Typography>Статус заказа:</Typography>
+                        </Grid>
+                        <Grid item xs={10}>
+                            <Typography gutterBottom>{order.status}</Typography>
+                            <Divider />
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12} spacing={3}>
+                        <Grid item xs={2}>
+                            <Typography>Тело письма:</Typography>
+                        </Grid>
+                        <Grid item xs={10}>
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: email.html,
+                                }}></div>
+                            <Divider />
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12} spacing={3}>
+                        <Typography gutterBottom>Answer</Typography>
+                    </Grid>
+                </Grid> */}
             </MuiDialogContent>
             <MuiDialogActions className={classes.actions}>
                 <Button autoFocus onClick={handleClose} color="primary">

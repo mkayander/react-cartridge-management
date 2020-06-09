@@ -1,7 +1,11 @@
 import api from "./api";
 
-export default async function fetchAll() {
+export function fetchAll() {
     return api.get("all");
+}
+
+export function getEmail(emailId) {
+    return api.get(`emails/${emailId}/`);
 }
 
 // export const fetchCartridgesList = async () => {

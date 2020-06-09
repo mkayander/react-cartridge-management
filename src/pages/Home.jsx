@@ -11,7 +11,7 @@ import {
     Chat,
 } from "../components";
 import { CommonApi } from "../api/CommonApi";
-import fetchAll from "../api";
+import { fetchAll } from "../api";
 
 import { isMobile } from "react-device-detect";
 import { Redirect } from "react-router-dom";
