@@ -3,9 +3,9 @@ import React from "react";
 import { Schedule } from "@material-ui/icons";
 import { Tooltip } from "@material-ui/core";
 
-function FinishedStatus() {
+function FinishedStatus({ title }) {
     return (
-        <Tooltip title="Обрабатывается" aria-label="Обрабатывается">
+        <Tooltip title={title ? title : ""} aria-label={title}>
             <Schedule />
         </Tooltip>
     );

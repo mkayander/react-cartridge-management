@@ -3,9 +3,9 @@ import React from "react";
 import { Email } from "@material-ui/icons";
 import { Tooltip } from "@material-ui/core";
 
-function InWorkStatus() {
+function InWorkStatus({ title }) {
     return (
-        <Tooltip title="Требует Отправки" aria-label="Требует Отправки">
+        <Tooltip title={title ? title : ""} aria-label={title}>
             <Email />
         </Tooltip>
     );

@@ -3,9 +3,9 @@ import React from "react";
 import { LocalShipping } from "@material-ui/icons";
 import { Tooltip } from "@material-ui/core";
 
-function InWorkStatus() {
+function InWorkStatus({ title }) {
     return (
-        <Tooltip title="В работе" aria-label="В работе">
+        <Tooltip title={title} aria-label={title}>
             <LocalShipping />
         </Tooltip>
     );

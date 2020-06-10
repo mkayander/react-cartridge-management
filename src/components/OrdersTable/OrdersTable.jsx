@@ -6,13 +6,14 @@ import { Paper } from "@material-ui/core";
 // import { DoneAll, CheckCircle, LocalShipping } from "@material-ui/icons";
 
 import MaterialTable from "material-table";
-import FinishedStatus from "./icons/FinishedStatus";
-import InWorkStatus from "./icons/InWorkStatus";
-import PendingStatus from "./icons/PendingStatus";
+// import FinishedStatus from "./icons/FinishedStatus";
+// import InWorkStatus from "./icons/InWorkStatus";
+// import PendingStatus from "./icons/PendingStatus";
 import matTablelocalization from "../../utils/localizations";
 
 import OrderDialog from "./OrderDialog";
-import getStatusOptions from "./orderOptions";
+import { getStatusOptions, getStatusIcon } from "./orderOptions";
+import { sendOrderEmail } from "../../api";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,10 +35,18 @@ function OrdersTable({
 
     const [openDialog, setOpenDialog] = React.useState(false);
     const [dialogData, setDialogData] = React.useState({});
-    const [statusOptions, setStatusOptions] = React.useState({});
+    const [statusOptions, setStatusOptions] = React.useState({
+        finished: "Завершён",
+        work: "В работе",
+        pending: "Обработка заказа",
+    });
 
     React.useEffect(() => {
-        setStatusOptions(getStatusOptions());
+        getStatusOptions()
+            .then((result) => {
+                setStatusOptions(result);
+            })
+            .catch((reason) => console.error(reason));
         // return () => {
         //     cleanup
         // }
@@ -49,14 +58,23 @@ function OrdersTable({
             (cartridgesChoices[item.name] = `${item.manufacturer} ${item.name}`)
     );
 
+    const dialogHandleClose = () => {
+        setOpenDialog(false);
+    };
+
+    const dialogHandleSendEmail = (orderId) => {
+        sendOrderEmail(orderId);
+        dialogHandleClose();
+    };
+
     return (
         <div>
             <OrderDialog
                 open={openDialog}
-                handleClose={() => {
-                    setOpenDialog(false);
-                }}
+                handleClose={dialogHandleClose}
+                handleSendEmail={dialogHandleSendEmail}
                 order={dialogData}
+                statusChoices={statusOptions}
             />
             <MaterialTable
                 isLoading={isLoading}
@@ -79,21 +97,12 @@ function OrdersTable({
                         field: "status",
                         editable: "onUpdate",
                         // editable: "never",
-                        initialEditValue: "pending",
-                        lookup: {
-                            finished: "Завершён",
-                            work: "В работе",
-                            pending: "Обработка заказа",
-                        },
+                        // initialEditValue: "creating",
+                        lookup: statusOptions,
                         render: (rowData) => {
-                            switch (rowData.status) {
-                                case "finished":
-                                    return <FinishedStatus />;
-                                case "work":
-                                    return <InWorkStatus />;
-                                default:
-                                    return <PendingStatus />;
-                            }
+                            return rowData
+                                ? getStatusIcon(rowData.status, statusOptions)
+                                : null;
                         },
                     },
                     {

@@ -9,13 +9,19 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
 import { getEmail } from "../../api";
+
+// import { isEmpty } from "lodash";
+
 import {
     TableContainer,
     Table,
     TableBody,
     TableRow,
     TableCell,
+    // CircularProgress,
+    LinearProgress,
 } from "@material-ui/core";
+import { getStatusIcon } from "./orderOptions";
 
 const useStyles = makeStyles((theme) => ({
     // root: {
@@ -40,23 +46,38 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function OrderDialog({ open, handleClose, order }) {
+export default function OrderDialog({
+    open,
+    handleClose,
+    handleSendEmail,
+    order,
+    statusChoices,
+}) {
     const classes = useStyles();
-    const [email, setEmail] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+    const [email, setEmail] = useState();
     useEffect(() => {
         console.log("OrderDialog: useEffect: ", order.email);
         if (order.email) {
+            setIsLoading(true);
             getEmail(order.email)
                 .then((response) => {
                     console.log(response);
                     setEmail(response.data);
                 })
-                .catch((reason) => console.error(reason));
+                .catch((reason) => console.error(reason))
+                .finally(() => setIsLoading(false));
+        } else {
+            setEmail(undefined);
         }
         // return () => {
         //     cleanup
         // }
     }, [order.email]);
+
+    // const handleEmailSend = () => {
+    //     sendOrderEmail(order.id);
+    // };
 
     return (
         <Dialog
@@ -67,9 +88,10 @@ export default function OrderDialog({ open, handleClose, order }) {
             aria-labelledby="customized-dialog-title"
             open={open}>
             <MuiDialogTitle disableTypography className={classes.title}>
-                <Typography variant="h6">
+                <Typography variant="h5">
                     Заказ картриджей от {new Date(order.date).toLocaleString()}
                 </Typography>
+                {isLoading ? <LinearProgress /> : null}
                 {handleClose ? (
                     <IconButton
                         aria-label="close"
@@ -88,29 +110,63 @@ export default function OrderDialog({ open, handleClose, order }) {
                         <TableBody>
                             <TableRow>
                                 <TableCell align="left">
-                                    <Typography>Статус заказа:</Typography>
+                                    <Typography variant="subtitle1">
+                                        Статус заказа:
+                                    </Typography>
                                 </TableCell>
                                 <TableCell align="left">
-                                    <Typography>{order.status}</Typography>
+                                    {/* <Typography>
+                                        {statusChoices[order.status]}
+                                    </Typography> */}
+                                    {getStatusIcon(order.status, statusChoices)}
                                 </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell align="left">
-                                    <Typography>Тело письма:</Typography>
+                                    <Typography variant="subtitle1">
+                                        Дата отправки письма:
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="left">
+                                    <Typography>
+                                        {order.email_is_sent && email
+                                            ? new Date(
+                                                  email.processed
+                                              ).toLocaleString()
+                                            : "Письмо ещё не отправлено!"}
+                                    </Typography>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell align="left">
+                                    <Typography variant="subtitle1">
+                                        Тело письма:
+                                    </Typography>
                                 </TableCell>
                                 <TableCell align="left">
                                     <div
                                         dangerouslySetInnerHTML={{
-                                            __html: email.html,
+                                            __html: order.html_message,
                                         }}></div>
                                 </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell align="left">
+                                    <Typography variant="subtitle1">
+                                        Ответ:
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="left"></TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
                 </TableContainer>
             </MuiDialogContent>
             <MuiDialogActions className={classes.actions}>
-                <Button autoFocus onClick={handleClose} color="primary">
+                <Button
+                    autoFocus
+                    onClick={() => handleSendEmail(order.id)}
+                    color="primary">
                     Отправить менеджеру
                 </Button>
             </MuiDialogActions>

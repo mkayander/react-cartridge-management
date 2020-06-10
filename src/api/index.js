@@ -12,6 +12,10 @@ export function getOrdersOptions() {
     return api.options("orders/");
 }
 
+export function sendOrderEmail(orderId) {
+    return api.post(`action/send-order/${orderId}`);
+}
+
 // export const fetchCartridgesList = async () => {
 //     const cartridges = await api.get("cartridges/");
 //     // console.log("fetchCartridgesList:", cartridges);
