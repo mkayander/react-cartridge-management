@@ -41,7 +41,7 @@ class Home extends Component {
 
     handleRefresh = async () => {
         this.setState({ loading: true });
-        fetchAll()
+        await fetchAll()
             .then((response) => {
                 if (response) {
                     const {
@@ -60,7 +60,6 @@ class Home extends Component {
             })
             .catch((error) => {
                 this.displayActions.error(error);
-                // throw error;
             })
             .finally(() => this.setState({ loading: false }));
     };
@@ -153,6 +152,7 @@ class Home extends Component {
                             isLoading={loading}
                             data={ordersData}
                             cartridges={cartridgesData}
+                            handleRefresh={this.orderApi.callbacks.refreshAll}
                             handleCreate={this.orderApi.create}
                             handleUpdate={this.orderApi.update}
                             handleDelete={this.orderApi.delete}

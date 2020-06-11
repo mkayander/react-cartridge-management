@@ -8,7 +8,7 @@ import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
-import { getEmail } from "../../api";
+import { getEmail, sendOrderEmail } from "../../api";
 
 // import { isEmpty } from "lodash";
 
@@ -49,9 +49,11 @@ const useStyles = makeStyles((theme) => ({
 export default function OrderDialog({
     open,
     handleClose,
-    handleSendEmail,
+    // handleSendEmail,
+    handleRefresh,
     order,
     statusChoices,
+    tableIsLoading,
 }) {
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false);
@@ -70,14 +72,19 @@ export default function OrderDialog({
         } else {
             setEmail(undefined);
         }
-        // return () => {
-        //     cleanup
-        // }
     }, [order.email]);
 
-    // const handleEmailSend = () => {
-    //     sendOrderEmail(order.id);
-    // };
+    const handleEmailSend = () => {
+        setIsLoading(true);
+        sendOrderEmail(order.id)
+            .then((value) => {
+                console.log(value);
+                handleClose();
+                handleRefresh();
+            })
+            .catch((reason) => console.error(reason))
+            .finally(() => setIsLoading(false));
+    };
 
     return (
         <Dialog
@@ -91,7 +98,7 @@ export default function OrderDialog({
                 <Typography variant="h5">
                     Заказ картриджей от {new Date(order.date).toLocaleString()}
                 </Typography>
-                {isLoading ? <LinearProgress /> : null}
+                {isLoading || tableIsLoading ? <LinearProgress /> : null}
                 {handleClose ? (
                     <IconButton
                         aria-label="close"
@@ -105,7 +112,6 @@ export default function OrderDialog({
                 <TableContainer>
                     <Table>
                         {/* <TableHead>
-
                         </TableHead> */}
                         <TableBody>
                             <TableRow>
@@ -128,13 +134,15 @@ export default function OrderDialog({
                                     </Typography>
                                 </TableCell>
                                 <TableCell align="left">
-                                    <Typography>
-                                        {order.email_is_sent && email
-                                            ? new Date(
-                                                  email.processed
-                                              ).toLocaleString()
-                                            : "Письмо ещё не отправлено!"}
-                                    </Typography>
+                                    {!isLoading ? (
+                                        <Typography>
+                                            {order.email_is_sent && email
+                                                ? new Date(
+                                                      email.processed
+                                                  ).toLocaleString()
+                                                : "Письмо ещё не отправлено!"}
+                                        </Typography>
+                                    ) : null}
                                 </TableCell>
                             </TableRow>
                             <TableRow>
@@ -165,7 +173,7 @@ export default function OrderDialog({
             <MuiDialogActions className={classes.actions}>
                 <Button
                     autoFocus
-                    onClick={() => handleSendEmail(order.id)}
+                    onClick={() => handleEmailSend()}
                     color="primary">
                     Отправить менеджеру
                 </Button>

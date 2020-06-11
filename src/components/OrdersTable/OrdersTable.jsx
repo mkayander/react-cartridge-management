@@ -1,14 +1,9 @@
 import React from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-// import { isEmpty } from "lodash";
 
 import { Paper } from "@material-ui/core";
-// import { DoneAll, CheckCircle, LocalShipping } from "@material-ui/icons";
 
 import MaterialTable from "material-table";
-// import FinishedStatus from "./icons/FinishedStatus";
-// import InWorkStatus from "./icons/InWorkStatus";
-// import PendingStatus from "./icons/PendingStatus";
 import matTablelocalization from "../../utils/localizations";
 
 import OrderDialog from "./OrderDialog";
@@ -27,6 +22,7 @@ function OrdersTable({
     isLoading,
     data,
     cartridges,
+    handleRefresh,
     handleCreate,
     handleUpdate,
     handleDelete,
@@ -47,9 +43,6 @@ function OrdersTable({
                 setStatusOptions(result);
             })
             .catch((reason) => console.error(reason));
-        // return () => {
-        //     cleanup
-        // }
     }, []);
 
     let cartridgesChoices = {};
@@ -62,19 +55,26 @@ function OrdersTable({
         setOpenDialog(false);
     };
 
-    const dialogHandleSendEmail = (orderId) => {
-        sendOrderEmail(orderId);
-        dialogHandleClose();
-    };
+    // const dialogHandleSendEmail = (orderId) => {
+    //     sendOrderEmail(orderId)
+    //         .then((value) => {
+    //             console.log(value);
+    //             dialogHandleClose();
+    //             handleRefresh();
+    //         })
+    //         .catch((reason) => console.error(reason));
+    // };
 
     return (
         <div>
             <OrderDialog
                 open={openDialog}
+                handleRefresh={handleRefresh}
                 handleClose={dialogHandleClose}
-                handleSendEmail={dialogHandleSendEmail}
+                // handleSendEmail={dialogHandleSendEmail}
                 order={dialogData}
                 statusChoices={statusOptions}
+                tableIsLoading={isLoading}
             />
             <MaterialTable
                 isLoading={isLoading}
