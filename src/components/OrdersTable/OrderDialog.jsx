@@ -59,7 +59,7 @@ export default function OrderDialog({
     const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState();
     useEffect(() => {
-        console.log("OrderDialog: useEffect: ", order.email);
+        // console.log("OrderDialog: useEffect: ", order.email);
         if (order.email) {
             setIsLoading(true);
             getEmail(order.email)
@@ -173,6 +173,7 @@ export default function OrderDialog({
             <MuiDialogActions className={classes.actions}>
                 <Button
                     autoFocus
+                    disabled={order.status !== "creating"}
                     onClick={() => handleEmailSend()}
                     color="primary">
                     Отправить менеджеру

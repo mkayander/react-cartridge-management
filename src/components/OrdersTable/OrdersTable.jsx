@@ -8,7 +8,7 @@ import matTablelocalization from "../../utils/localizations";
 
 import OrderDialog from "./OrderDialog";
 import { getStatusOptions, getStatusIcon } from "./orderOptions";
-import { sendOrderEmail } from "../../api";
+// import { sendOrderEmail } from "../../api";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -124,6 +124,7 @@ function OrdersTable({
                         title: "Номер",
                         field: "number",
                         type: "numeric",
+                        editable: "onUpdate",
                         emptyValue: "Не определён",
                     },
                     {
@@ -150,6 +151,10 @@ function OrdersTable({
                 options={{
                     exportButton: true,
                     actionsColumnIndex: -1,
+                    actionsCellStyle: {
+                        // display: "flex",
+                        justifyContent: "flex-end",
+                    },
                 }}
                 actions={[
                     (rowData) => ({
@@ -158,7 +163,8 @@ function OrdersTable({
                             rowData.status !== "work"
                                 ? undefined
                                 : "Завершить заказ",
-                        disabled: rowData.status !== "work",
+                        // disabled: rowData.status !== "work",
+                        hidden: rowData.status !== "work",
                         onClick: (event, rowData) => {
                             if (!rowData.finished) {
                                 rowData.finished = true;

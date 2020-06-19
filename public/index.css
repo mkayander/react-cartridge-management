@@ -47,3 +47,6 @@
 }
 
 
+.MuiTable-root tr td:last-child div {
+    justify-content: flex-end;
+}
