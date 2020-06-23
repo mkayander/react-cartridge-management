@@ -63,6 +63,7 @@ export default function OrderDialog({
     const [takeOld, setTakeOld] = useState(false);
     useEffect(() => {
         // console.log("OrderDialog: useEffect: ", order.email);
+        setTakeOld(order.take_old_away);
         if (order.email) {
             setIsLoading(true);
             getEmail(order.email)
@@ -75,7 +76,7 @@ export default function OrderDialog({
         } else {
             setEmail(undefined);
         }
-    }, [order.email]);
+    }, [order]);
 
     const handleEmailSend = () => {
         setIsLoading(true);
