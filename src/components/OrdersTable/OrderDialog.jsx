@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
-import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import Typography from "@material-ui/core/Typography";
 import { getEmail, sendOrderEmail } from "../../api";
 
 // import { isEmpty } from "lodash";
 
 import {
+    Button,
+    Dialog,
+    IconButton,
+    Typography,
     TableContainer,
     Table,
     TableBody,
@@ -20,6 +20,8 @@ import {
     TableCell,
     // CircularProgress,
     LinearProgress,
+    Checkbox,
+    FormControlLabel,
 } from "@material-ui/core";
 import { getStatusIcon } from "./orderOptions";
 
@@ -58,6 +60,7 @@ export default function OrderDialog({
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState();
+    const [takeOld, setTakeOld] = useState(false);
     useEffect(() => {
         // console.log("OrderDialog: useEffect: ", order.email);
         if (order.email) {
@@ -76,7 +79,7 @@ export default function OrderDialog({
 
     const handleEmailSend = () => {
         setIsLoading(true);
-        sendOrderEmail(order.id)
+        sendOrderEmail(order.id, { take_old_away: takeOld })
             .then((value) => {
                 console.log(value);
                 handleClose();
@@ -84,6 +87,10 @@ export default function OrderDialog({
             })
             .catch((reason) => console.error(reason))
             .finally(() => setIsLoading(false));
+    };
+
+    const handleCheckbox = (event) => {
+        setTakeOld(event.target.checked);
     };
 
     return (
@@ -143,6 +150,24 @@ export default function OrderDialog({
                                                 : "Письмо ещё не отправлено!"}
                                         </Typography>
                                     ) : null}
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell align="left">
+                                    <Typography variant="subtitle1">
+                                        Опции:
+                                    </Typography>
+                                </TableCell>
+                                <TableCell align="left">
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={takeOld}
+                                                onChange={handleCheckbox}
+                                            />
+                                        }
+                                        label="Забрать старые картриджи"
+                                    />
                                 </TableCell>
                             </TableRow>
                             <TableRow>

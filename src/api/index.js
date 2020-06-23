@@ -12,8 +12,8 @@ export function getOrdersOptions() {
     return api.options("orders/");
 }
 
-export function sendOrderEmail(orderId) {
-    return api.post(`action/send-order/${orderId}`);
+export function sendOrderEmail(orderId, options = {}) {
+    return api.post(`action/send-order/${orderId}`, options);
 }
 
 // export const fetchCartridgesList = async () => {
