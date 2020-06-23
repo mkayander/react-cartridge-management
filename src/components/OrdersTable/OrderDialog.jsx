@@ -164,6 +164,7 @@ export default function OrderDialog({
                                         control={
                                             <Checkbox
                                                 checked={takeOld}
+                                                disabled={order.email_is_sent}
                                                 onChange={handleCheckbox}
                                             />
                                         }

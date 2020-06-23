@@ -19,19 +19,18 @@ export class CommonApi {
     create = async (instance) => {
         this.callbacks.setLoading(true);
         api.post(this.path, instance)
-            .then(
-                () => {
-                    this.callbacks.refreshAll();
-                    this.callbacks.success(this.messages.create.success);
-                }
-            )
+            .then(() => {
+                this.callbacks.refreshAll();
+                this.callbacks.success(this.messages.create.success);
+            })
             .catch((reason) => {
+                this.callbacks.setLoading(false);
                 this.callbacks.error(
                     this.messages.create.error + " \n " + reason
                 );
                 // console.log("CommonApi.create.catch", reason.body);
-            })
-            .finally(() => this.callbacks.setLoading(false));
+            });
+        // .finally(() => this.callbacks.setLoading(false));
     };
 
     update = async (instance) => {
@@ -42,11 +41,12 @@ export class CommonApi {
                 this.callbacks.success(this.messages.update.success);
             })
             .catch((reason) => {
+                this.callbacks.setLoading(false);
                 this.callbacks.error(
                     this.messages.update.error + " \n " + reason
                 );
-            })
-            .finally(() => this.callbacks.setLoading(false));
+            });
+        // .finally(() => this.callbacks.setLoading(false));
     };
 
     delete = async (instance) => {
@@ -57,10 +57,11 @@ export class CommonApi {
                 this.callbacks.success(this.messages.delete.success);
             })
             .catch((reason) => {
+                this.callbacks.setLoading(false);
                 this.callbacks.error(
                     this.messages.delete.error + " \n " + reason
                 );
-            })
-            .finally(() => this.callbacks.setLoading(false));
+            });
+        // .finally(() => this.callbacks.setLoading(false));
     };
 }
