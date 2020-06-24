@@ -20,6 +20,7 @@ import Test from "./pages/Test";
 import Home from "./pages/Home";
 import MobileHome from "./pages/MobileHome";
 import CustomChat from "./components/Chat/CustomChat";
+import { QueryParamProvider } from "use-query-params";
 
 // import styles from "./App.css";
 
@@ -67,40 +68,46 @@ export class App extends Component {
 
         return (
             <BrowserRouter>
-                <MuiThemeProvider theme={theme}>
-                    <SnackbarProvider
-                        ref={this.notistackRef}
-                        action={(key) => (
-                            <IconButton
-                                onClick={this.onClickDismiss(key)}
-                                color="inherit">
-                                <Close />
-                            </IconButton>
-                        )}>
-                        <NavBar
-                            title={navbarTitle}
-                            username={this.state.auth.username}
-                        />
-                        <Container
-                            style={{ paddingTop: 5 + "%" }}
-                            maxWidth="lg">
-                            <Switch>
-                                <Route path="/" exact component={Home} />
-                                <Route path="/test" exact component={Test} />
-                                <Route
-                                    path="/mobile"
-                                    exact
-                                    component={MobileHome}
-                                />
-                                <Route
-                                    path="/Chat"
-                                    exact
-                                    component={CustomChat}
-                                />
-                            </Switch>
-                        </Container>
-                    </SnackbarProvider>
-                </MuiThemeProvider>
+                <QueryParamProvider ReactRouterRoute={Route}>
+                    <MuiThemeProvider theme={theme}>
+                        <SnackbarProvider
+                            ref={this.notistackRef}
+                            action={(key) => (
+                                <IconButton
+                                    onClick={this.onClickDismiss(key)}
+                                    color="inherit">
+                                    <Close />
+                                </IconButton>
+                            )}>
+                            <NavBar
+                                title={navbarTitle}
+                                username={this.state.auth.username}
+                            />
+                            <Container
+                                style={{ paddingTop: 5 + "%" }}
+                                maxWidth="lg">
+                                <Switch>
+                                    <Route path="/" exact component={Home} />
+                                    <Route
+                                        path="/test"
+                                        exact
+                                        component={Test}
+                                    />
+                                    <Route
+                                        path="/mobile"
+                                        exact
+                                        component={MobileHome}
+                                    />
+                                    <Route
+                                        path="/Chat"
+                                        exact
+                                        component={CustomChat}
+                                    />
+                                </Switch>
+                            </Container>
+                        </SnackbarProvider>
+                    </MuiThemeProvider>
+                </QueryParamProvider>
             </BrowserRouter>
         );
     }

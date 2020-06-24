@@ -16,6 +16,7 @@
         "material-table": "^1.57.2",
         "node-sass": "^4.14.1",
         "notistack": "^0.9.16",
+        "query-string": "^6.13.1",
         "react": "^16.13.1",
         "react-app-rewire-disable-chunks": "0.0.1",
         "react-app-rewired": "^2.1.6",
@@ -31,6 +32,7 @@
         "sass": "^1.26.5",
         "tinycolor2": "^1.4.1",
         "typescript": "^3.9.2",
+        "use-query-params": "^1.1.4",
         "webpack-bundle-tracker": "^1.0.0-alpha.1"
     },
     "scripts": {

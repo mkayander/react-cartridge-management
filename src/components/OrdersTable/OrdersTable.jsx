@@ -8,6 +8,7 @@ import matTablelocalization from "../../utils/localizations";
 
 import OrderDialog from "./OrderDialog";
 import { getStatusOptions, getStatusIcon } from "./orderOptions";
+import { BooleanParam, withDefault, useQueryParam } from "use-query-params";
 // import { sendOrderEmail } from "../../api";
 
 const useStyles = makeStyles((theme) => ({
@@ -29,7 +30,11 @@ function OrdersTable({
 }) {
     const classes = useStyles();
 
-    const [openDialog, setOpenDialog] = React.useState(false);
+    // const [openDialog, setOpenDialog] = React.useState(false);
+    const [openDialog, setOpenDialog] = useQueryParam(
+        "orderDialog",
+        withDefault(BooleanParam, false)
+    );
     const [dialogData, setDialogData] = React.useState({});
     const [statusOptions, setStatusOptions] = React.useState({
         finished: "Завершён",
