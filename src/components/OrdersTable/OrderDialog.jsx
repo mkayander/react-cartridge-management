@@ -6,8 +6,6 @@ import MuiDialogActions from "@material-ui/core/DialogActions";
 import CloseIcon from "@material-ui/icons/Close";
 import { getEmail, sendOrderEmail } from "../../api";
 
-// import { isEmpty } from "lodash";
-
 import {
     Button,
     Dialog,
@@ -18,7 +16,6 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    // CircularProgress,
     LinearProgress,
     Checkbox,
     FormControlLabel,
@@ -51,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
 export default function OrderDialog({
     open,
     handleClose,
-    // handleSendEmail,
     handleRefresh,
     order,
     statusChoices,
@@ -61,22 +57,25 @@ export default function OrderDialog({
     const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState();
     const [takeOld, setTakeOld] = useState(false);
+
     useEffect(() => {
-        // console.log("OrderDialog: useEffect: ", order.email);
-        setTakeOld(order.take_old_away);
-        if (order.email) {
-            setIsLoading(true);
-            getEmail(order.email)
-                .then((response) => {
-                    console.log(response);
-                    setEmail(response.data);
-                })
-                .catch((reason) => console.error(reason))
-                .finally(() => setIsLoading(false));
-        } else {
-            setEmail(undefined);
+        if (order) {
+            setTakeOld(order.take_old_away);
+            if (order.email) {
+                setIsLoading(true);
+                getEmail(order.email)
+                    .then((response) => {
+                        setEmail(response.data);
+                    })
+                    .catch((reason) => console.error(reason))
+                    .finally(() => setIsLoading(false));
+            } else {
+                setEmail(undefined);
+            }
         }
     }, [order]);
+
+    // console.log("takeOld:", takeOld);
 
     const handleEmailSend = () => {
         setIsLoading(true);
@@ -94,9 +93,8 @@ export default function OrderDialog({
         setTakeOld(event.target.checked);
     };
 
-    return (
+    return order ? (
         <Dialog
-            // className={classes.root}
             maxWidth="md"
             fullWidth={true}
             onClose={handleClose}
@@ -120,7 +118,7 @@ export default function OrderDialog({
                 <TableContainer>
                     <Table>
                         {/* <TableHead>
-                        </TableHead> */}
+                    </TableHead> */}
                         <TableBody>
                             <TableRow>
                                 <TableCell align="left">
@@ -130,8 +128,8 @@ export default function OrderDialog({
                                 </TableCell>
                                 <TableCell align="left">
                                     {/* <Typography>
-                                        {statusChoices[order.status]}
-                                    </Typography> */}
+                                    {statusChoices[order.status]}
+                                </Typography> */}
                                     {getStatusIcon(order.status, statusChoices)}
                                 </TableCell>
                             </TableRow>
@@ -207,5 +205,5 @@ export default function OrderDialog({
                 </Button>
             </MuiDialogActions>
         </Dialog>
-    );
+    ) : null;
 }

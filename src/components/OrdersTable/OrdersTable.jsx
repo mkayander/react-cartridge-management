@@ -8,8 +8,7 @@ import matTablelocalization from "../../utils/localizations";
 
 import OrderDialog from "./OrderDialog";
 import { getStatusOptions, getStatusIcon } from "./orderOptions";
-import { BooleanParam, withDefault, useQueryParam } from "use-query-params";
-// import { sendOrderEmail } from "../../api";
+import { NumberParam, useQueryParam } from "use-query-params";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,12 +29,7 @@ function OrdersTable({
 }) {
     const classes = useStyles();
 
-    // const [openDialog, setOpenDialog] = React.useState(false);
-    const [openDialog, setOpenDialog] = useQueryParam(
-        "orderDialog",
-        withDefault(BooleanParam, false)
-    );
-    const [dialogData, setDialogData] = React.useState({});
+    const [orderId, setOrderId] = useQueryParam("orderId", NumberParam);
     const [statusOptions, setStatusOptions] = React.useState({
         finished: "Завершён",
         work: "В работе",
@@ -57,27 +51,31 @@ function OrdersTable({
     );
 
     const dialogHandleClose = () => {
-        setOpenDialog(false);
+        // setOpenDialog(undefined);
+        setOrderId(undefined);
     };
 
-    // const dialogHandleSendEmail = (orderId) => {
-    //     sendOrderEmail(orderId)
-    //         .then((value) => {
-    //             console.log(value);
-    //             dialogHandleClose();
-    //             handleRefresh();
-    //         })
-    //         .catch((reason) => console.error(reason));
-    // };
+    const handleRowClick = (event, row) => {
+        // setOpenDialog(true);
+        setOrderId(row.id);
+    };
+
+    const getOrderById = function (id) {
+        if (data.length > 0 && id) {
+            const result = data.find((o) => o.id === id);
+            return result ? result : {};
+        } else {
+            return null;
+        }
+    };
 
     return (
         <div>
             <OrderDialog
-                open={openDialog}
+                open={orderId !== undefined}
                 handleRefresh={handleRefresh}
                 handleClose={dialogHandleClose}
-                // handleSendEmail={dialogHandleSendEmail}
-                order={dialogData}
+                order={getOrderById(orderId)}
                 statusChoices={statusOptions}
                 tableIsLoading={isLoading}
             />
@@ -85,10 +83,7 @@ function OrdersTable({
                 isLoading={isLoading}
                 title="Заказы"
                 localization={matTablelocalization}
-                onRowClick={(event, row) => {
-                    setDialogData(row);
-                    setOpenDialog(true);
-                }}
+                onRowClick={handleRowClick}
                 columns={[
                     {
                         title: "#",
@@ -101,8 +96,6 @@ function OrdersTable({
                         title: "Статус",
                         field: "status",
                         editable: "onUpdate",
-                        // editable: "never",
-                        // initialEditValue: "creating",
                         lookup: statusOptions,
                         render: (rowData) => {
                             return rowData
@@ -157,7 +150,6 @@ function OrdersTable({
                     exportButton: true,
                     actionsColumnIndex: -1,
                     actionsCellStyle: {
-                        // display: "flex",
                         justifyContent: "flex-end",
                     },
                 }}
@@ -168,7 +160,6 @@ function OrdersTable({
                             rowData.status !== "work"
                                 ? undefined
                                 : "Завершить заказ",
-                        // disabled: rowData.status !== "work",
                         hidden: rowData.status !== "work",
                         onClick: (event, rowData) => {
                             if (!rowData.finished) {
@@ -183,7 +174,6 @@ function OrdersTable({
                     onRowAdd: (newData) =>
                         new Promise((resolve) => {
                             handleCreate(newData);
-                            // enqueueSnackbar("Заказ добавлен");
                             resolve();
                         }),
                     onRowUpdate: (newData) =>
@@ -191,13 +181,11 @@ function OrdersTable({
                             newData.finished =
                                 newData.status === "finished" ? true : false;
                             handleUpdate(newData);
-                            // enqueueSnackbar("Заказ обновлён");
                             resolve();
                         }),
                     onRowDelete: (oldData) =>
                         new Promise((resolve) => {
                             handleDelete(oldData);
-                            // enqueueSnackbar("Заказ удалён");
                             resolve();
                         }),
                 }}
