@@ -23,11 +23,19 @@ class MobileHome extends Component {
     };
 
     componentDidMount() {
-        this.getCartridges();
+        this.getCartridges().then(() => {
+            if (this.props.query.cartridge) {
+                this.setState({
+                    currCartridge: this.getCartridgeByName(
+                        this.props.query.cartridge
+                    ),
+                });
+            }
+        });
     }
 
-    getCartridges() {
-        api.get("cartridges/").then((response) => {
+    async getCartridges() {
+        return api.get("cartridges/").then((response) => {
             if (response) {
                 this.setState({
                     cartridgesData: response.data,
@@ -101,7 +109,6 @@ class MobileHome extends Component {
 
     render() {
         const { cartridgesData, currCartridge } = this.state;
-        // const { query } = this.props;
 
         return (
             <Paper elevation={5} style={{ maxWidth: 300 }}>
