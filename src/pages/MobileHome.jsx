@@ -115,7 +115,15 @@ class MobileHome extends Component {
                         this.state.cartridgesData.length > 0 ? cartridge : ""
                     }
                     onChange={this.handleChangeCartridge}
-                    helperText={`Осталось картриджей ${this.state.countData}`}
+                    helperText={
+                        cartridge
+                            ? `Осталось картриджей - ${
+                                  this.state.cartridgesData.find(
+                                      (c) => c.name === cartridge
+                                  ).count
+                              }`
+                            : null
+                    }
                     variant="outlined">
                     {this.state.cartridgesData.map((option, index) => (
                         <MenuItem key={option.name} value={option.name}>
