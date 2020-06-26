@@ -142,7 +142,12 @@ class MobileHome extends Component {
                     id="outlined-number"
                     label="Количество"
                     type="number"
-                    InputLabelProps={{ shrink: true }}
+                    // InputLabelProps={{ shrink: true }}
+                    inputProps={
+                        currCartridge
+                            ? { min: 0, max: currCartridge.count }
+                            : {}
+                    }
                     variant="outlined"
                     onChange={this.handleChangeCount}
                 />
