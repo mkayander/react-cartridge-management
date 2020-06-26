@@ -13,6 +13,7 @@ import { withQueryParams, StringParam, withDefault } from "use-query-params";
 class MobileHome extends Component {
     state = {
         setLoading: false,
+        currCartridge: null,
         cartridgesData: [],
         cartIndex: "",
         cart: "",
@@ -25,8 +26,8 @@ class MobileHome extends Component {
         this.getCartridges();
     }
 
-    async getCartridges() {
-        return api.get("cartridges/").then((response) => {
+    getCartridges() {
+        api.get("cartridges/").then((response) => {
             if (response) {
                 this.setState({
                     cartridgesData: response.data,
@@ -36,11 +37,9 @@ class MobileHome extends Component {
     }
 
     handleChangeCartridge = (event) => {
-        const val = event.target.value;
-        // const count = this.state.cartridgesData[val].count;
-        // const name = this.state.cartridgesData[val].name;
-        // this.setState({ cartIndex: val, countData: count, cart: name });
-        this.props.setQuery({ cartridge: val });
+        const name = event.target.value;
+        this.setState({ currCartridge: this.getCartridgeByName(name) });
+        this.props.setQuery({ cartridge: name });
     };
 
     handleChangeCount = (event) => {
@@ -92,7 +91,7 @@ class MobileHome extends Component {
         this.supplyApi.create({
             out: true,
             count: this.state.countSupply,
-            cartridge: this.state.cart,
+            cartridge: this.state.currCartridge.name,
             comment: this.state.commit,
         });
 
@@ -101,10 +100,8 @@ class MobileHome extends Component {
     };
 
     render() {
-        const { cartridgesData } = this.state;
-        const { query } = this.props;
-
-        const crtObj = this.getCartridgeByName(query.cartridge);
+        const { cartridgesData, currCartridge } = this.state;
+        // const { query } = this.props;
 
         return (
             <Paper elevation={5} style={{ maxWidth: 300 }}>
@@ -118,10 +115,12 @@ class MobileHome extends Component {
                     id="outlined-select-currency"
                     select
                     label="Картридж"
-                    value={crtObj ? crtObj.name : ""}
+                    value={currCartridge ? currCartridge.name : ""}
                     onChange={this.handleChangeCartridge}
                     helperText={
-                        crtObj ? `Осталось картриджей - ${crtObj.count}` : null
+                        currCartridge
+                            ? `Осталось картриджей - ${currCartridge.count}`
+                            : null
                     }
                     variant="outlined">
                     {cartridgesData.map((option, index) => (
@@ -160,7 +159,7 @@ class MobileHome extends Component {
                         marginTop: 10,
                         color: "white",
                     }}
-                    onClick={() => this.createSupplyOut()}>
+                    onClick={this.createSupplyOut}>
                     <span>ВЫДАТЬ</span>
                 </Button>
                 <Link
