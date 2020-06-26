@@ -143,10 +143,21 @@ class MobileHome extends Component {
                     label="Количество"
                     type="number"
                     // InputLabelProps={{ shrink: true }}
-                    inputProps={
+                    // inputProps={
+                    //     currCartridge
+                    //         ? { min: 0, max: currCartridge.count }
+                    //         : {}
+                    // }
+                    onInput={(event) =>
                         currCartridge
-                            ? { min: 0, max: currCartridge.count }
-                            : {}
+                            ? (event.target.value = Math.max(
+                                  0,
+                                  Math.min(
+                                      event.target.value,
+                                      currCartridge.count
+                                  )
+                              ))
+                            : event.target.value
                     }
                     variant="outlined"
                     onChange={this.handleChangeCount}
