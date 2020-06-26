@@ -96,9 +96,16 @@ class MobileHome extends Component {
             comment: this.state.commit,
         });
 
+    getCartridgeByName = (name) => {
+        return this.state.cartridgesData.find((c) => c.name === name);
+    };
+
     render() {
+        const { cartridgesData } = this.state;
         const { query } = this.props;
-        const { cartridge } = query;
+
+        const crtObj = this.getCartridgeByName(query.cartridge);
+
         return (
             <Paper elevation={5} style={{ maxWidth: 300 }}>
                 <TextField
@@ -111,21 +118,13 @@ class MobileHome extends Component {
                     id="outlined-select-currency"
                     select
                     label="Картридж"
-                    value={
-                        this.state.cartridgesData.length > 0 ? cartridge : ""
-                    }
+                    value={crtObj ? crtObj.name : ""}
                     onChange={this.handleChangeCartridge}
                     helperText={
-                        cartridge
-                            ? `Осталось картриджей - ${
-                                  this.state.cartridgesData.find(
-                                      (c) => c.name === cartridge
-                                  ).count
-                              }`
-                            : null
+                        crtObj ? `Осталось картриджей - ${crtObj.count}` : null
                     }
                     variant="outlined">
-                    {this.state.cartridgesData.map((option, index) => (
+                    {cartridgesData.map((option, index) => (
                         <MenuItem key={option.name} value={option.name}>
                             {option.name}
                         </MenuItem>
