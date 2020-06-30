@@ -223,7 +223,7 @@ class CustomChat extends Component {
                     </div>
 
                     <div className="rcw-customchat-list">
-                        {this.state.messageResponse.reverse().map((el) => el)}
+                        {this.state.messageResponse.map((el) => el)}
                         <hr className="hr-text" data-content="New message" />
                         {this.state.newMessageList.map((el, index) =>
                             this.generate(
