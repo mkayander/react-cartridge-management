@@ -46,18 +46,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function OrderDialog({
-    open,
-    handleClose,
-    handleRefresh,
-    order,
-    statusChoices,
-    tableIsLoading,
+    open, // Boolean open state
+    handleClose, // Function to set "open" value to false
+    handleRefresh, // Function to refresh order data
+    order, // Order data object to be displayed in this dialog
+    statusChoices, // Available choices for the status icon
+    tableIsLoading, // Boolean that indicates if the parent table is in loading state
 }) {
     const classes = useStyles();
     const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState();
     const [takeOld, setTakeOld] = useState(false);
 
+    // Hook that runs each time "order" data is changed
     useEffect(() => {
         if (order) {
             setTakeOld(order.take_old_away);
@@ -74,8 +75,6 @@ export default function OrderDialog({
             }
         }
     }, [order]);
-
-    // console.log("takeOld:", takeOld);
 
     const handleEmailSend = () => {
         setIsLoading(true);
