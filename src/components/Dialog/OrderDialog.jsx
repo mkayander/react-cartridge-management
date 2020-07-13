@@ -78,7 +78,12 @@ export default function OrderDialog({
 
     const handleEmailSend = () => {
         setIsLoading(true);
-        sendOrderEmail(order.id, { take_old_away: takeOld })
+        let tmp;
+        if (order.cartridge)
+            tmp = "c" + order.id;
+        else
+            tmp = "s" + order.id;
+        sendOrderEmail(tmp, { take_old_away: takeOld })
             .then((value) => {
                 console.log(value);
                 handleClose();
