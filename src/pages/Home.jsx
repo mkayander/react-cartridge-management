@@ -16,6 +16,7 @@ import { fetchAll } from "../api";
 import { isMobile } from "react-device-detect";
 import { Redirect } from "react-router-dom";
 import { listCookies } from "../utils/listCookies";
+import ServiceTable from "../components/ServiceTable/ServiceTable";
 
 class Home extends Component {
     state = {
@@ -23,6 +24,7 @@ class Home extends Component {
         cartridgesData: [],
         suppliesData: [],
         ordersData: [],
+        serviceData: [],
         chatMessageHistory: [],
     };
 
@@ -49,11 +51,13 @@ class Home extends Component {
                         supplies,
                         orders,
                         chatMessage,
+                        service,
                     } = response.data;
                     this.setState({
                         cartridgesData: cartridges,
                         suppliesData: supplies,
                         ordersData: orders,
+                        serviceData: service,
                         chatMessageHistory: chatMessage,
                     });
                 }
@@ -115,6 +119,31 @@ class Home extends Component {
         }
     );
 
+     serviceApi = new CommonApi(
+        "service/",
+        {
+            create: {
+                success: "Заявка на ремонт создана успешно!",
+                error: "Не удалось создать заявку!",
+            },
+            update: {
+                success: "Заявка на ремонт обновлена успешно!",
+                error: "Не удалось обновить заявку!",
+            },
+            delete: {
+                success: "Зявка на ремонт удалёна успешно!",
+                error: "Не удалось удалить заявку!",
+            },
+        },
+        {
+            refreshAll: this.handleRefresh,
+            setLoading: (bool) => this.setState({ loading: bool }),
+            success: this.displayActions.success,
+            error: this.displayActions.error,
+            msg: this.displayActions.msg,
+        }
+    );
+
     async componentDidMount() {
         await this.handleRefresh();
         console.table(listCookies());
@@ -127,6 +156,7 @@ class Home extends Component {
             cartridgesData,
             suppliesData,
             ordersData,
+            serviceData,
         } = this.state;
 
         if (isMobile && this.props.location.backLink === undefined) {
@@ -156,6 +186,16 @@ class Home extends Component {
                             handleCreate={this.orderApi.create}
                             handleUpdate={this.orderApi.update}
                             handleDelete={this.orderApi.delete}
+                        />
+                    </Grid>
+                    <Grid key="service" xs={12} lg={12} item>
+                        <ServiceTable
+                            isLoading={loading}
+                            data={serviceData}
+                            handleRefresh={this.serviceApi.callbacks.refreshAll}
+                            handleCreate={this.serviceApi.create}
+                            handleUpdate={this.serviceApi.update}
+                            handleDelete={this.serviceApi.delete}
                         />
                     </Grid>
                     <Chat data={chatMessageHistory} />

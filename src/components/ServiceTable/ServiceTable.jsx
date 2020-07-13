@@ -1,14 +1,15 @@
 import React from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import {makeStyles, useTheme} from "@material-ui/core/styles";
 
-import { Paper } from "@material-ui/core";
+import {Paper} from "@material-ui/core";
 
 import MaterialTable from "material-table";
 import matTablelocalization from "../../utils/localizations";
 
 import OrderDialog from "../Dialog/OrderDialog";
-import { getStatusOptions, getStatusIcon } from "../Dialog/orderOptions";
-import { NumberParam, useQueryParam } from "use-query-params";
+import {getStatusOptions, getStatusIcon} from "../Dialog/orderOptions";
+import {NumberParam, useQueryParam} from "use-query-params";
+import {getPrintersOptions} from "./serviceOptions";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,22 +19,28 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function OrdersTable({
-    isLoading,
-    data,
-    cartridges,
-    handleRefresh,
-    handleCreate,
-    handleUpdate,
-    handleDelete,
-}) {
+function ServiceTable({
+                          isLoading,
+                          data,
+                          handleRefresh,
+                          handleCreate,
+                          handleUpdate,
+                          handleDelete,
+                      }) {
     const classes = useStyles();
 
-    const [orderId, setOrderId] = useQueryParam("orderId", NumberParam);
+    const [serviceId, setServiceId] = useQueryParam("serviceId", NumberParam);
     const [statusOptions, setStatusOptions] = React.useState({
         finished: "Завершён",
         work: "В работе",
         pending: "Обработка заказа",
+    });
+
+    const [printerOptions, setPrinterOptions] = React.useState({
+        HP_M227fdn: "HP LaserJet Pro MFP M227fdn",
+        HP_M426fdn: "HP LaserJet Pro MFP M426fdn",
+        Kyocera_FS1030MFP: "Kyocera FS-1030MFP",
+        Kyocera_FS1035MFP: "Kyocera FS-1035MFP"
     });
 
     React.useEffect(() => {
@@ -44,23 +51,25 @@ function OrdersTable({
             .catch((reason) => console.error(reason));
     }, []);
 
-    let cartridgesChoices = {};
-    cartridges.forEach(
-        (item) =>
-            (cartridgesChoices[item.name] = `${item.manufacturer} ${item.name}`)
-    );
-
-    const dialogHandleClose = () => {
-        // setOpenDialog(undefined);
-        setOrderId(undefined);
-    };
+    React.useEffect(() => {
+        getPrintersOptions()
+            .then((result) => {
+                setPrinterOptions(result);
+            })
+            .catch((reason) => console.error(reason));
+    }, []);
 
     const handleRowClick = (event, row) => {
         // setOpenDialog(true);
-        setOrderId(row.id);
+        setServiceId(row.id);
     };
 
-    const getOrderById = function (id) {
+    const dialogHandleClose = () => {
+        // setOpenDialog(undefined);
+        setServiceId(undefined);
+    };
+
+    const getServiceById = function (id) {
         if (data.length > 0 && id) {
             const result = data.find((o) => o.id === id);
             return result ? result : {};
@@ -72,16 +81,16 @@ function OrdersTable({
     return (
         <div>
             <OrderDialog
-                open={orderId !== undefined}
+                open={serviceId !== undefined}
                 handleRefresh={handleRefresh}
                 handleClose={dialogHandleClose}
-                order={getOrderById(orderId)}
+                order={getServiceById(serviceId)}
                 statusChoices={statusOptions}
                 tableIsLoading={isLoading}
             />
             <MaterialTable
                 isLoading={isLoading}
-                title="Заказы картриджей"
+                title="Ремонт принтеров"
                 localization={matTablelocalization}
                 onRowClick={handleRowClick}
                 columns={[
@@ -126,14 +135,16 @@ function OrdersTable({
                         emptyValue: "Не определён",
                     },
                     {
-                        title: "Картридж",
-                        field: "cartridge",
-                        lookup: cartridgesChoices,
+                        title: "Принтер",
+                        field: "printer",
+                        type: "string",
+                        lookup: printerOptions,
                     },
                     {
-                        title: "Количество",
-                        field: "count",
-                        type: "numeric",
+                        title: "Инвентарный номер",
+                        field: "inv_number",
+                        type: "string",
+                        emptyValue: "Не определён",
                     },
                 ]}
                 data={data}
@@ -194,4 +205,4 @@ function OrdersTable({
     );
 }
 
-export default OrdersTable;
+export default ServiceTable;

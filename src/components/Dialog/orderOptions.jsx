@@ -4,7 +4,7 @@ import {
     InWorkStatus,
     PendingStatus,
     CreatingStatus,
-} from "./icons";
+} from "../OrdersTable/icons";
 import React from "react";
 
 export async function getStatusOptions() {
