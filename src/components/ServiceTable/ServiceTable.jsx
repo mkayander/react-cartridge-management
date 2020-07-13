@@ -37,10 +37,10 @@ function ServiceTable({
     });
 
     const [printerOptions, setPrinterOptions] = React.useState({
-        HP_M227fdn: "HP LaserJet Pro MFP M227fdn",
+        /*HP_M227fdn: "HP LaserJet Pro MFP M227fdn",
         HP_M426fdn: "HP LaserJet Pro MFP M426fdn",
         Kyocera_FS1030MFP: "Kyocera FS-1030MFP",
-        Kyocera_FS1035MFP: "Kyocera FS-1035MFP"
+        Kyocera_FS1035MFP: "Kyocera FS-1035MFP"*/
     });
 
     React.useEffect(() => {
@@ -145,6 +145,12 @@ function ServiceTable({
                         field: "inv_number",
                         type: "string",
                         emptyValue: "Не определён",
+                    },
+                    {
+                        title: "Причина неисправности",
+                        field: "defect_description",
+                        type: "string",
+                        emptyValue: "",
                     },
                 ]}
                 data={data}

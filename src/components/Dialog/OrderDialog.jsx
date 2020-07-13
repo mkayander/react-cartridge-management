@@ -151,6 +151,7 @@ export default function OrderDialog({
                                     ) : null}
                                 </TableCell>
                             </TableRow>
+                            {order.cartridge ? (
                             <TableRow>
                                 <TableCell align="left">
                                     <Typography variant="subtitle1">
@@ -169,7 +170,7 @@ export default function OrderDialog({
                                         label="Забрать старые картриджи"
                                     />
                                 </TableCell>
-                            </TableRow>
+                            </TableRow> ): undefined}
                             <TableRow>
                                 <TableCell align="left">
                                     <Typography variant="subtitle1">
