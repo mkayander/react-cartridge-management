@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 
-import { Grid } from "@material-ui/core";
+import {Grid} from "@material-ui/core";
 
-import { withSnackbar } from "notistack";
+import {withSnackbar} from "notistack";
 
 import {
     CartridesTable,
@@ -10,13 +10,14 @@ import {
     OrdersTable,
     Chat,
 } from "../components";
-import { CommonApi } from "../api/CommonApi";
-import { fetchAll } from "../api";
+import {CommonApi} from "../api/CommonApi";
+import {fetchAll} from "../api";
 
-import { isMobile } from "react-device-detect";
-import { Redirect } from "react-router-dom";
-import { listCookies } from "../utils/listCookies";
+import {isMobile} from "react-device-detect";
+import {Redirect} from "react-router-dom";
+import {listCookies} from "../utils/listCookies";
 import ServiceTable from "../components/ServiceTable/ServiceTable";
+import {getWsLiveDataUrl} from "../api/urls";
 
 class Home extends Component {
     state = {
@@ -30,10 +31,10 @@ class Home extends Component {
 
     displayActions = {
         success: async (msg) => {
-            this.props.enqueueSnackbar(msg, { variant: "success" });
+            this.props.enqueueSnackbar(msg, {variant: "success"});
         },
         error: async (msg) => {
-            this.props.enqueueSnackbar(`${msg}`, { variant: "error" });
+            this.props.enqueueSnackbar(`${msg}`, {variant: "error"});
             console.log("dispError:", msg);
         },
         msg: async (msg) => {
@@ -41,8 +42,21 @@ class Home extends Component {
         },
     };
 
+    connect = () => {
+        var ws = new WebSocket(getWsLiveDataUrl());
+
+        ws.onmessage = (e) => {
+            var data = JSON.parse(e.data);
+            this.handleRefresh();
+        };
+
+        ws.onopen = () => {
+            console.log("Connect to live data")
+        };
+    };
+
     handleRefresh = async () => {
-        this.setState({ loading: true });
+        this.setState({loading: true});
         await fetchAll()
             .then((response) => {
                 if (response) {
@@ -65,7 +79,7 @@ class Home extends Component {
             .catch((error) => {
                 this.displayActions.error(error);
             })
-            .finally(() => this.setState({ loading: false }));
+            .finally(() => this.setState({loading: false}));
     };
 
     supplyApi = new CommonApi(
@@ -87,7 +101,7 @@ class Home extends Component {
         {
             refreshAll: this.handleRefresh,
             // setState: (value) => this.setState({ suppliesData: value }),
-            setLoading: (bool) => this.setState({ loading: bool }),
+            setLoading: (bool) => this.setState({loading: bool}),
             success: this.displayActions.success,
             error: this.displayActions.error,
             msg: this.displayActions.msg,
@@ -112,14 +126,14 @@ class Home extends Component {
         },
         {
             refreshAll: this.handleRefresh,
-            setLoading: (bool) => this.setState({ loading: bool }),
+            setLoading: (bool) => this.setState({loading: bool}),
             success: this.displayActions.success,
             error: this.displayActions.error,
             msg: this.displayActions.msg,
         }
     );
 
-     serviceApi = new CommonApi(
+    serviceApi = new CommonApi(
         "service/",
         {
             create: {
@@ -137,7 +151,7 @@ class Home extends Component {
         },
         {
             refreshAll: this.handleRefresh,
-            setLoading: (bool) => this.setState({ loading: bool }),
+            setLoading: (bool) => this.setState({loading: bool}),
             success: this.displayActions.success,
             error: this.displayActions.error,
             msg: this.displayActions.msg,
@@ -145,6 +159,7 @@ class Home extends Component {
     );
 
     async componentDidMount() {
+        await this.connect();
         await this.handleRefresh();
         console.table(listCookies());
     }
@@ -160,12 +175,12 @@ class Home extends Component {
         } = this.state;
 
         if (isMobile && this.props.location.backLink === undefined) {
-            return <Redirect to="/mobile" />;
+            return <Redirect to="/mobile"/>;
         } else {
             return (
                 <Grid container spacing={3}>
                     <Grid key="cartridges" xs={12} lg={4} item>
-                        <CartridesTable cartridges={cartridgesData} />
+                        <CartridesTable cartridges={cartridgesData}/>
                     </Grid>
                     <Grid key="supplies" xs={12} lg={8} item>
                         <SuppliesEditable
@@ -198,7 +213,7 @@ class Home extends Component {
                             handleDelete={this.serviceApi.delete}
                         />
                     </Grid>
-                    <Chat data={chatMessageHistory} />
+                    <Chat data={chatMessageHistory}/>
                 </Grid>
             );
         }
