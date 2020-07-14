@@ -14,3 +14,7 @@ export function getApiUrl() {
 export function getWsChatUrl() {
     return `ws://${getHostname()}/chat`;
 }
+
+export function getWsLiveDataUrl() {
+    return `ws://${getHostname()}/liveData`;
+}
