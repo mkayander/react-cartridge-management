@@ -53,6 +53,12 @@ class Home extends Component {
         ws.onopen = () => {
             console.log("Connect to live data")
         };
+
+        ws.onclose = () => {
+            setTimeout( () => {
+                this.connect();
+            }, 1000);
+        };
     };
 
     handleRefresh = async () => {
