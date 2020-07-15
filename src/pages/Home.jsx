@@ -105,7 +105,6 @@ class Home extends Component {
             },
         },
         {
-            refreshAll: this.handleRefresh,
             // setState: (value) => this.setState({ suppliesData: value }),
             setLoading: (bool) => this.setState({loading: bool}),
             success: this.displayActions.success,
@@ -131,7 +130,6 @@ class Home extends Component {
             },
         },
         {
-            refreshAll: this.handleRefresh,
             setLoading: (bool) => this.setState({loading: bool}),
             success: this.displayActions.success,
             error: this.displayActions.error,
@@ -156,7 +154,6 @@ class Home extends Component {
             },
         },
         {
-            refreshAll: this.handleRefresh,
             setLoading: (bool) => this.setState({loading: bool}),
             success: this.displayActions.success,
             error: this.displayActions.error,
