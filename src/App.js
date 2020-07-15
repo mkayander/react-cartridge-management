@@ -85,7 +85,7 @@ export class App extends Component {
                             />
                             <Container
                                 style={{ paddingTop: 5 + "%" }}
-                                maxWidth="lg">
+                                maxWidth="xl">
                                 <Switch>
                                     <Route path="/" exact component={Home} />
                                     <Route
