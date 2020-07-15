@@ -1,40 +1,45 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 
-import {Grid} from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
-import {withSnackbar} from "notistack";
+import { withSnackbar } from "notistack";
 
 import {
     CartridesTable,
     SuppliesEditable,
     OrdersTable,
+    ServicesTable,
     Chat,
 } from "../components";
-import {CommonApi} from "../api/CommonApi";
-import {fetchAll} from "../api";
+import { CommonApi } from "../api/CommonApi";
+import { fetchAll, fetchCartridges } from "../api";
 
-import {isMobile} from "react-device-detect";
-import {Redirect} from "react-router-dom";
-import {listCookies} from "../utils/listCookies";
-import ServiceTable from "../components/ServiceTable/ServiceTable";
-import {getWsLiveDataUrl} from "../api/urls";
+import { isMobile } from "react-device-detect";
+import { Redirect } from "react-router-dom";
+import { listCookies } from "../utils/listCookies";
+import { getWsLiveDataUrl } from "../api/urls";
 
 class Home extends Component {
     state = {
-        loading: false,
         cartridgesData: [],
         suppliesData: [],
         ordersData: [],
-        serviceData: [],
+        servicesData: [],
         chatMessageHistory: [],
+        loading: {
+            cartridge: false,
+            supply: false,
+            order: false,
+            service: false,
+        },
     };
 
     displayActions = {
         success: async (msg) => {
-            this.props.enqueueSnackbar(msg, {variant: "success"});
+            this.props.enqueueSnackbar(msg, { variant: "success" });
         },
         error: async (msg) => {
-            this.props.enqueueSnackbar(`${msg}`, {variant: "error"});
+            this.props.enqueueSnackbar(`${msg}`, { variant: "error" });
             console.log("dispError:", msg);
         },
         msg: async (msg) => {
@@ -43,27 +48,45 @@ class Home extends Component {
     };
 
     connect = () => {
-        var ws = new WebSocket(getWsLiveDataUrl());
+        const ws = new WebSocket(getWsLiveDataUrl());
 
-        ws.onmessage = (e) => {
-            var data = JSON.parse(e.data);
-            this.handleRefresh();
+        ws.onmessage = (event) => {
+            const modelName = JSON.parse(event.data)["message"];
+            console.log(
+                `${new Date().toLocaleTimeString()} -> New update message - ${modelName}`
+            );
+            this.refreshModel(modelName);
         };
 
         ws.onopen = () => {
-            console.log("Connect to live data")
+            console.log("Connect to live data");
         };
 
         ws.onclose = () => {
-            setTimeout( () => {
+            setTimeout(() => {
                 this.connect();
             }, 1000);
         };
     };
 
-    handleRefresh = async () => {
-        this.setState({loading: true});
-        await fetchAll()
+    refreshModel = (modelName) => {
+        if (modelName in this.apiControllers) {
+            this.apiControllers[modelName].refresh();
+        } else {
+            console.warn("Invalid model name.");
+        }
+    };
+
+    handleRefresh = () => {
+        this.setState({
+            loading: {
+                cartridge: true,
+                supply: true,
+                order: true,
+                service: true,
+            },
+        });
+        fetchAll()
             .then((response) => {
                 if (response) {
                     const {
@@ -77,7 +100,7 @@ class Home extends Component {
                         cartridgesData: cartridges,
                         suppliesData: supplies,
                         ordersData: orders,
-                        serviceData: service,
+                        servicesData: service,
                         chatMessageHistory: chatMessage,
                     });
                 }
@@ -85,81 +108,105 @@ class Home extends Component {
             .catch((error) => {
                 this.displayActions.error(error);
             })
-            .finally(() => this.setState({loading: false}));
+            .finally(() =>
+                this.setState({
+                    loading: {
+                        cartridge: false,
+                        supply: false,
+                        order: false,
+                        service: false,
+                    },
+                })
+            );
     };
 
-    supplyApi = new CommonApi(
-        "supplies/",
-        {
-            create: {
-                success: "Перемещение создано успешно!",
-                error: "Не удалось создать перемещение!",
+    apiControllers = {
+        Order: new CommonApi(
+            "orders/",
+            {
+                create: {
+                    success: "Заказ создан успешно!",
+                    error: "Не удалось создать заказ!",
+                },
+                update: {
+                    success: "Заказ обновлён успешно!",
+                    error: "Не удалось обновить заказ!",
+                },
+                delete: {
+                    success: "Заказ удалён успешно!",
+                    error: "Не удалось удалить заказ!",
+                },
             },
-            update: {
-                success: "Перемещение обновлено успешно!",
-                error: "Не удалось обновить перемещение!",
-            },
-            delete: {
-                success: "Перемещение удалено успешно!",
-                error: "Не удалось удалить перемещение!",
-            },
-        },
-        {
-            // setState: (value) => this.setState({ suppliesData: value }),
-            setLoading: (bool) => this.setState({loading: bool}),
-            success: this.displayActions.success,
-            error: this.displayActions.error,
-            msg: this.displayActions.msg,
-        }
-    );
+            {
+                setState: (data) => this.setState({ ordersData: data }),
+                setLoading: (bool) =>
+                    this.setState({ loading: { order: bool } }),
+                success: this.displayActions.success,
+                error: this.displayActions.error,
+                msg: this.displayActions.msg,
+            }
+        ),
 
-    orderApi = new CommonApi(
-        "orders/",
-        {
-            create: {
-                success: "Заказ создан успешно!",
-                error: "Не удалось создать заказ!",
+        Supply: new CommonApi(
+            "supplies/",
+            {
+                create: {
+                    success: "Перемещение создано успешно!",
+                    error: "Не удалось создать перемещение!",
+                },
+                update: {
+                    success: "Перемещение обновлено успешно!",
+                    error: "Не удалось обновить перемещение!",
+                },
+                delete: {
+                    success: "Перемещение удалено успешно!",
+                    error: "Не удалось удалить перемещение!",
+                },
             },
-            update: {
-                success: "Заказ обновлён успешно!",
-                error: "Не удалось обновить заказ!",
-            },
-            delete: {
-                success: "Заказ удалён успешно!",
-                error: "Не удалось удалить заказ!",
-            },
-        },
-        {
-            setLoading: (bool) => this.setState({loading: bool}),
-            success: this.displayActions.success,
-            error: this.displayActions.error,
-            msg: this.displayActions.msg,
-        }
-    );
+            {
+                setState: (data) => this.setState({ suppliesData: data }),
+                setLoading: (bool) =>
+                    this.setState({ loading: { supply: bool } }),
+                success: this.displayActions.success,
+                error: this.displayActions.error,
+                msg: this.displayActions.msg,
+            }
+        ),
 
-    serviceApi = new CommonApi(
-        "service/",
-        {
-            create: {
-                success: "Заявка на ремонт создана успешно!",
-                error: "Не удалось создать заявку!",
+        Service: new CommonApi(
+            "service/",
+            {
+                create: {
+                    success: "Заявка на ремонт создана успешно!",
+                    error: "Не удалось создать заявку!",
+                },
+                update: {
+                    success: "Заявка на ремонт обновлена успешно!",
+                    error: "Не удалось обновить заявку!",
+                },
+                delete: {
+                    success: "Зявка на ремонт удалёна успешно!",
+                    error: "Не удалось удалить заявку!",
+                },
             },
-            update: {
-                success: "Заявка на ремонт обновлена успешно!",
-                error: "Не удалось обновить заявку!",
-            },
-            delete: {
-                success: "Зявка на ремонт удалёна успешно!",
-                error: "Не удалось удалить заявку!",
+            {
+                setState: (data) => this.setState({ servicesData: data }),
+                setLoading: (bool) =>
+                    this.setState({ loading: { service: bool } }),
+                success: this.displayActions.success,
+                error: this.displayActions.error,
+                msg: this.displayActions.msg,
+            }
+        ),
+
+        Cartridge: {
+            refresh: () => {
+                return fetchCartridges().then((result) => {
+                    this.setState({ cartridgesData: result.data });
+                });
             },
         },
-        {
-            setLoading: (bool) => this.setState({loading: bool}),
-            success: this.displayActions.success,
-            error: this.displayActions.error,
-            msg: this.displayActions.msg,
-        }
-    );
+    };
 
     async componentDidMount() {
         await this.connect();
@@ -174,49 +221,41 @@ class Home extends Component {
             cartridgesData,
             suppliesData,
             ordersData,
-            serviceData,
+            servicesData: serviceData,
         } = this.state;
 
         if (isMobile && this.props.location.backLink === undefined) {
-            return <Redirect to="/mobile"/>;
+            return <Redirect to="/mobile" />;
         } else {
             return (
                 <Grid container spacing={3}>
                     <Grid key="cartridges" xs={12} lg={4} item>
-                        <CartridesTable cartridges={cartridgesData}/>
+                        <CartridesTable cartridges={cartridgesData} />
                     </Grid>
                     <Grid key="supplies" xs={12} lg={8} item>
                         <SuppliesEditable
-                            isLoading={loading}
+                            isLoading={loading.supply}
                             data={suppliesData}
                             cartridges={cartridgesData}
-                            handleSupplyDelete={this.supplyApi.delete}
-                            handleSupplyCreate={this.supplyApi.create}
-                            handleSupplyUpdate={this.supplyApi.update}
+                            apiController={this.apiControllers.Supply}
                         />
                     </Grid>
                     <Grid key="orders" xs={12} lg={12} item>
                         <OrdersTable
-                            isLoading={loading}
+                            isLoading={loading.order}
                             data={ordersData}
                             cartridges={cartridgesData}
-                            handleRefresh={this.orderApi.callbacks.refreshAll}
-                            handleCreate={this.orderApi.create}
-                            handleUpdate={this.orderApi.update}
-                            handleDelete={this.orderApi.delete}
+                            apiController={this.apiControllers.Order}
                         />
                     </Grid>
                     <Grid key="service" xs={12} lg={12} item>
-                        <ServiceTable
-                            isLoading={loading}
+                        <ServicesTable
+                            isLoading={loading.service}
                             data={serviceData}
-                            handleRefresh={this.serviceApi.callbacks.refreshAll}
-                            handleCreate={this.serviceApi.create}
-                            handleUpdate={this.serviceApi.update}
-                            handleDelete={this.serviceApi.delete}
+                            apiController={this.apiControllers.Service}
                         />
                     </Grid>
-                    <Chat data={chatMessageHistory}/>
+                    <Chat data={chatMessageHistory} />
                 </Grid>
             );
         }

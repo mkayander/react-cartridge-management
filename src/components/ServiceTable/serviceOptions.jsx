@@ -1,5 +1,4 @@
-import React from "react";
-import {getServiceOptions} from "../../api";
+import { getServiceOptions } from "../../api";
 
 export async function getPrintersOptions() {
     console.log("getStatusOptions called.");

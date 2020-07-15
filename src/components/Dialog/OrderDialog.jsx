@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 export default function OrderDialog({
     open, // Boolean open state
     handleClose, // Function to set "open" value to false
-    handleRefresh, // Function to refresh order data
+    // handleRefresh, // Function to refresh order data
     order, // Order data object to be displayed in this dialog
     statusChoices, // Available choices for the status icon
     tableIsLoading, // Boolean that indicates if the parent table is in loading state
@@ -79,15 +79,13 @@ export default function OrderDialog({
     const handleEmailSend = () => {
         setIsLoading(true);
         let tmp;
-        if (order.cartridge)
-            tmp = "c" + order.id;
-        else
-            tmp = "s" + order.id;
+        if (order.cartridge) tmp = "c" + order.id;
+        else tmp = "s" + order.id;
         sendOrderEmail(tmp, { take_old_away: takeOld })
             .then((value) => {
                 console.log(value);
                 handleClose();
-                handleRefresh();
+                // handleRefresh();
             })
             .catch((reason) => console.error(reason))
             .finally(() => setIsLoading(false));
@@ -156,25 +154,28 @@ export default function OrderDialog({
                                 </TableCell>
                             </TableRow>
                             {order.cartridge ? (
-                            <TableRow>
-                                <TableCell align="left">
-                                    <Typography variant="subtitle1">
-                                        Опции:
-                                    </Typography>
-                                </TableCell>
-                                <TableCell align="left">
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={takeOld}
-                                                disabled={order.email_is_sent}
-                                                onChange={handleCheckbox}
-                                            />
-                                        }
-                                        label="Забрать старые картриджи"
-                                    />
-                                </TableCell>
-                            </TableRow> ): undefined}
+                                <TableRow>
+                                    <TableCell align="left">
+                                        <Typography variant="subtitle1">
+                                            Опции:
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={takeOld}
+                                                    disabled={
+                                                        order.email_is_sent
+                                                    }
+                                                    onChange={handleCheckbox}
+                                                />
+                                            }
+                                            label="Забрать старые картриджи"
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            ) : undefined}
                             <TableRow>
                                 <TableCell align="left">
                                     <Typography variant="subtitle1">

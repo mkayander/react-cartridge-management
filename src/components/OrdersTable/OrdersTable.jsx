@@ -18,15 +18,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function OrdersTable({
-    isLoading,
-    data,
-    cartridges,
-    handleRefresh,
-    handleCreate,
-    handleUpdate,
-    handleDelete,
-}) {
+function OrdersTable({ isLoading, data, cartridges, apiController }) {
     const classes = useStyles();
 
     const [orderId, setOrderId] = useQueryParam("orderId", NumberParam);
@@ -51,12 +43,10 @@ function OrdersTable({
     );
 
     const dialogHandleClose = () => {
-        // setOpenDialog(undefined);
         setOrderId(undefined);
     };
 
     const handleRowClick = (event, row) => {
-        // setOpenDialog(true);
         setOrderId(row.id);
     };
 
@@ -73,7 +63,6 @@ function OrdersTable({
         <div>
             <OrderDialog
                 open={orderId !== undefined}
-                handleRefresh={handleRefresh}
                 handleClose={dialogHandleClose}
                 order={getOrderById(orderId)}
                 statusChoices={statusOptions}
@@ -165,7 +154,7 @@ function OrdersTable({
                             if (!rowData.finished) {
                                 rowData.finished = true;
                                 rowData.status = "finished";
-                                handleUpdate(rowData);
+                                apiController.update(rowData);
                             }
                         },
                     }),
@@ -173,19 +162,19 @@ function OrdersTable({
                 editable={{
                     onRowAdd: (newData) =>
                         new Promise((resolve) => {
-                            handleCreate(newData);
+                            apiController.create(newData);
                             resolve();
                         }),
                     onRowUpdate: (newData) =>
                         new Promise((resolve) => {
                             newData.finished =
                                 newData.status === "finished" ? true : false;
-                            handleUpdate(newData);
+                            apiController.update(newData);
                             resolve();
                         }),
                     onRowDelete: (oldData) =>
                         new Promise((resolve) => {
-                            handleDelete(oldData);
+                            apiController.delete(oldData);
                             resolve();
                         }),
                 }}

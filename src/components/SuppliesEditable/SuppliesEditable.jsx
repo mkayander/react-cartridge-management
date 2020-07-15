@@ -21,18 +21,7 @@ const prepareData = (supply) => {
     return supply;
 };
 
-function SuppliesEditable(props) {
-    const {
-        isLoading,
-        data,
-        cartridges,
-        handleSupplyDelete,
-        handleSupplyUpdate,
-        handleSupplyCreate,
-    } = props;
-
-    // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
+function SuppliesEditable({ isLoading, data, cartridges, apiController }) {
     const classes = useStyles();
     const theme = useTheme();
 
@@ -91,28 +80,23 @@ function SuppliesEditable(props) {
                 pageSize: 10,
                 exportButton: true,
                 actionsColumnIndex: -1,
-                // emptyRowsWhenPaging: true,
-                // paging: false,
                 rowStyle: (rowData) =>
                     rowData.out ? rowStyles.outRow : rowStyles.inRow,
             }}
             editable={{
                 onRowAdd: (newData) =>
                     new Promise((resolve) => {
-                        handleSupplyCreate(prepareData(newData));
-                        // enqueueSnackbar("Перемещение добавлено");
+                        apiController.create(prepareData(newData));
                         resolve();
                     }),
                 onRowUpdate: (newData) =>
                     new Promise((resolve) => {
-                        handleSupplyUpdate(prepareData(newData));
-                        // enqueueSnackbar("Перемещение обновлено");
+                        apiController.update(prepareData(newData));
                         resolve();
                     }),
                 onRowDelete: (oldData) =>
                     new Promise((resolve) => {
-                        handleSupplyDelete(oldData);
-                        // enqueueSnackbar("Перемещение удалено");
+                        apiController.delete(oldData);
                         resolve();
                     }),
             }}

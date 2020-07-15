@@ -1,15 +1,15 @@
 import React from "react";
-import {makeStyles, useTheme} from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-import {Paper} from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 
 import MaterialTable from "material-table";
 import matTablelocalization from "../../utils/localizations";
 
 import OrderDialog from "../Dialog/OrderDialog";
-import {getStatusOptions, getStatusIcon} from "../Dialog/orderOptions";
-import {NumberParam, useQueryParam} from "use-query-params";
-import {getPrintersOptions} from "./serviceOptions";
+import { getStatusOptions, getStatusIcon } from "../Dialog/orderOptions";
+import { NumberParam, useQueryParam } from "use-query-params";
+import { getPrintersOptions } from "./serviceOptions";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,14 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function ServiceTable({
-                          isLoading,
-                          data,
-                          handleRefresh,
-                          handleCreate,
-                          handleUpdate,
-                          handleDelete,
-                      }) {
+function ServiceTable({ isLoading, data, apiController }) {
     const classes = useStyles();
 
     const [serviceId, setServiceId] = useQueryParam("serviceId", NumberParam);
@@ -82,7 +75,6 @@ function ServiceTable({
         <div>
             <OrderDialog
                 open={serviceId !== undefined}
-                handleRefresh={handleRefresh}
                 handleClose={dialogHandleClose}
                 order={getServiceById(serviceId)}
                 statusChoices={statusOptions}
@@ -182,7 +174,7 @@ function ServiceTable({
                             if (!rowData.finished) {
                                 rowData.finished = true;
                                 rowData.status = "finished";
-                                handleUpdate(rowData);
+                                apiController.update(rowData);
                             }
                         },
                     }),
@@ -190,19 +182,19 @@ function ServiceTable({
                 editable={{
                     onRowAdd: (newData) =>
                         new Promise((resolve) => {
-                            handleCreate(newData);
+                            apiController.create(newData);
                             resolve();
                         }),
                     onRowUpdate: (newData) =>
                         new Promise((resolve) => {
                             newData.finished =
                                 newData.status === "finished" ? true : false;
-                            handleUpdate(newData);
+                            apiController.update(newData);
                             resolve();
                         }),
                     onRowDelete: (oldData) =>
                         new Promise((resolve) => {
-                            handleDelete(oldData);
+                            apiController.delete(oldData);
                             resolve();
                         }),
                 }}
